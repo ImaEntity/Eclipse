@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "eclipse",
+	"version": "${version}",
+	"name": "Eclipse",
+	"description": ".vclip -4",
+	"authors": [
+		"ImaEntity"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/eclipse/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.entity.eclipse.Eclipse"
+		]
+	},
+	"mixins": [
+		"mixins/main.mixins.json",
+		"mixins/world.mixins.json",
+		"mixins/network.mixins.json",
+		"mixins/movement.mixins.json",
+		"mixins/render.mixins.json",
+		"mixins/events.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.10",
+		"minecraft": "~1.20.5",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

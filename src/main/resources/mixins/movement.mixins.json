@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "com.entity.eclipse.mixin.movement",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"IEntityVelocityUpdateS2CPacketMixin",
+		"LivingEntityMixin",
+		"BlockCollisionSpliteratorMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

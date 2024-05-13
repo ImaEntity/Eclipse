@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.entity.eclipse.mixin.events",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ClientConnectionMixin",
+		"ClientPlayerEntityMixin",
+		"ClientPlayerInteractionManagerMixin",
+		"ItemStackMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

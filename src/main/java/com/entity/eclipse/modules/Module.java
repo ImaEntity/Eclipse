@@ -1,0 +1,50 @@
+package com.entity.eclipse.modules;
+
+import com.entity.eclipse.utils.Configuration;
+import com.entity.eclipse.utils.Keybind;
+import com.entity.eclipse.utils.events.render.RenderEvent;
+
+public abstract class Module {
+    private final String name;
+    private final String description;
+    private final ModuleType type;
+    protected boolean enabled = false;
+
+    public Keybind keybind;
+    public Configuration config;
+
+
+    public Module(String name, String description, ModuleType type) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+
+        this.config = new Configuration();
+        this.keybind = Keybind.unbound();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+    public String getDescription() {
+        return this.description;
+    }
+    public ModuleType getType() {
+        return this.type;
+    }
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public abstract void tick();
+    public abstract void onEnable();
+    public abstract void onDisable();
+    public abstract void renderWorld(RenderEvent event);
+    public abstract void renderScreen(RenderEvent event);
+
+    @Override
+    public String toString() {
+        return "§6" + this.name + "§r";
+    }
+
+}
