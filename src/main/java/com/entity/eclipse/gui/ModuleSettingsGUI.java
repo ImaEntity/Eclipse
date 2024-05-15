@@ -276,7 +276,8 @@ public class ModuleSettingsGUI extends Screen {
             y += this.textRenderer.fontHeight + this.padding;
         }
 
-        y += this.textRenderer.fontHeight + this.padding;
+        if(!settings.isEmpty())
+            y += this.textRenderer.fontHeight + this.padding;
 
         String keybindString = "Keybind";
         String keybindText = this.module.keybind.toString();

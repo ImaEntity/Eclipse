@@ -1,4 +1,4 @@
-package com.entity.eclipse.mixin.events;
+package com.entity.eclipse.mixin;
 
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.lore.LoreEvent;
@@ -22,9 +22,7 @@ public class ItemStackMixin {
         List<Text> returnValue = info.getReturnValue();
         LoreEvent event = new LoreEvent((ItemStack) (Object) this, returnValue);
 
-        boolean wasCancelled = Events.Lore.fireEvent(LoreEvents.REQUEST, event);
+        Events.Lore.fireEvent(LoreEvents.REQUEST, event);
         info.setReturnValue(event.getLore());
-
-        if(wasCancelled) info.cancel();
     }
 }

@@ -8,6 +8,7 @@ import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.DoubleValue;
+import com.google.common.collect.Streams;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -16,18 +17,14 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import com.google.common.collect.Streams;
 import net.minecraft.util.shape.VoxelShape;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Jesus extends Module {
-    private final BlockPos.Mutable blockPos = new BlockPos.Mutable();
     private int packetTimer = 0;
     private int tickTimer = 10;
 
@@ -129,27 +126,25 @@ public class Jesus extends Module {
         boolean foundLiquid = false;
         boolean foundSolid = false;
 
-        List<Box> blockCollisions = Streams.stream(Eclipse.client.world.getBlockCollisions(
+        ArrayList<BlockState> belowPlayer = Streams.stream(Eclipse.client.world.getBlockCollisions(
                 Eclipse.client.player,
                 Eclipse.client.player.getBoundingBox().offset(0, -0.5, 0)
         ))
-                .map(VoxelShape::getBoundingBox)
-                .collect(Collectors.toCollection(ArrayList::new));
+        .map(VoxelShape::getBoundingBox)
+        .map(box -> new BlockPos(
+                (int) MathHelper.lerp(0.5f, box.minX, box.maxX),
+                (int) MathHelper.lerp(0.5f, box.minY, box.maxY),
+                (int) MathHelper.lerp(0.5f, box.minZ, box.maxZ)
+        ))
+        .map(Eclipse.client.world::getBlockState)
+        .collect(Collectors.toCollection(ArrayList::new));
 
-        for(Box bb : blockCollisions) {
-            this.blockPos.set(
-                    MathHelper.lerp(0.5D, bb.minX, bb.maxX),
-                    MathHelper.lerp(0.5D, bb.minY, bb.maxY),
-                    MathHelper.lerp(0.5D, bb.minZ, bb.maxZ)
-            );
-
-            BlockState blockState = Eclipse.client.world.getBlockState(blockPos);
-
+        for(BlockState state : belowPlayer) {
             if(
-                    (blockState.getBlock() == Blocks.WATER || blockState.getFluidState().getFluid() == Fluids.WATER) ||
-                    (blockState.getBlock() == Blocks.LAVA || blockState.getFluidState().getFluid() == Fluids.LAVA)
+                    (state.getBlock() == Blocks.WATER || state.getFluidState().getFluid() == Fluids.WATER) ||
+                    (state.getBlock() == Blocks.LAVA || state.getFluidState().getFluid() == Fluids.LAVA)
             ) foundLiquid = true;
-            else if(!blockState.isAir())
+            else if(!state.isAir())
                 foundSolid = true;
         }
 

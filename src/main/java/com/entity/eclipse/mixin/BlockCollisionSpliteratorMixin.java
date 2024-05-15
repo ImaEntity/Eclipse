@@ -1,4 +1,4 @@
-package com.entity.eclipse.mixin.movement;
+package com.entity.eclipse.mixin;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.ModuleManager;

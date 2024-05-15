@@ -6,7 +6,6 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.Keybind;
-import com.entity.eclipse.utils.Strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +14,14 @@ import java.util.Map;
 public class Panic extends Command {
     private final ArrayList<Module> modules = new ArrayList<>();
     private final HashMap<Module, Keybind> keybinds = new HashMap<>();
+    private boolean hardPanicked = false;
 
     public Panic() {
         super("Panic", "OHFUCKOHFUCKOHFUCK", "panic", "p", "fuck");
+    }
+
+    public boolean isHardPanicked() {
+        return this.hardPanicked;
     }
 
     @Override
@@ -25,14 +29,16 @@ public class Panic extends Command {
         String option = args.length != 0 ? args[0] : "";
 
         if(option.equalsIgnoreCase("restore")) {
-            for(Module module : modules)
+            for(Module module : this.modules)
                 ModuleManager.enable(module);
 
-            for(Map.Entry<Module, Keybind> entry : keybinds.entrySet())
+            for(Map.Entry<Module, Keybind> entry : this.keybinds.entrySet())
                 entry.getKey().keybind = entry.getValue();
 
-            modules.clear();
-            keybinds.clear();
+            this.modules.clear();
+            this.keybinds.clear();
+
+            this.hardPanicked = false;
 
             return;
         }
@@ -41,14 +47,14 @@ public class Panic extends Command {
             for(Module module : ModuleManager.getModules()) {
                 if(!option.equalsIgnoreCase("hard")) continue;
 
-                keybinds.put(module, module.keybind);
+                this.keybinds.put(module, module.keybind);
                 module.keybind = Keybind.unbound();
             }
 
             for(Module module : ModuleManager.getActiveModules()) {
                 if(module.getType() == ModuleType.RENDER && !option.equalsIgnoreCase("hard")) continue;
 
-                modules.add(module);
+                this.modules.add(module);
 
                 // Queue for next tick, prevents ConcurrentModificationException
                 ModuleManager.queueDisable(module);
@@ -61,5 +67,6 @@ public class Panic extends Command {
         if(!option.equalsIgnoreCase("hard")) return;
 
         Eclipse.client.inGameHud.getChatHud().clear(true);
+        this.hardPanicked = true;
     }
 }

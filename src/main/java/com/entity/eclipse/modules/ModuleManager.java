@@ -1,10 +1,8 @@
 package com.entity.eclipse.modules;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.modules.combat.AutoLog;
-import com.entity.eclipse.modules.combat.AutoTotem;
-import com.entity.eclipse.modules.combat.Criticals;
-import com.entity.eclipse.modules.combat.Killaura;
+import com.entity.eclipse.modules.combat.*;
+import com.entity.eclipse.modules.misc.BrandSpoof;
 import com.entity.eclipse.modules.misc.Test;
 import com.entity.eclipse.modules.movement.*;
 import com.entity.eclipse.modules.network.AntiPacketKick;
@@ -38,20 +36,26 @@ public class ModuleManager {
 
         // Combat
 
+        modules.add(new AimAssist());
         modules.add(new AutoTotem());
         modules.add(new AutoLog());
         modules.add(new Criticals());
         modules.add(new Killaura());
+        modules.add(new Knockback());
 
         // Movement
 
         modules.add(new AirJump());
+        modules.add(new AutoSneak());
         modules.add(new Blink());
         modules.add(new Flight());
         modules.add(new Jesus());
+        modules.add(new LongJump());
         modules.add(new NoFall());
         modules.add(new NoJumpCooldown());
+        modules.add(new SafeWalk());
         modules.add(new Speed());
+        modules.add(new Sprint());
         modules.add(new Velocity());
 
         // Player
@@ -78,6 +82,7 @@ public class ModuleManager {
 
         // Misc
 
+        modules.add(new BrandSpoof());
         modules.add(new Test());
     }
 

@@ -1,6 +1,6 @@
 package com.entity.eclipse.modules.movement;
 
-import com.entity.eclipse.mixin.movement.IEntityVelocityUpdateS2CPacketMixin;
+import com.entity.eclipse.mixin.IEntityVelocityUpdateS2CPacketMixin;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;

@@ -1,4 +1,4 @@
-package com.entity.eclipse.mixin.render;
+package com.entity.eclipse.mixin;
 
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.render.Xray;

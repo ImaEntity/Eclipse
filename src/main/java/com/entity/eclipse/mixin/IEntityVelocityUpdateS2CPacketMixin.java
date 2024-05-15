@@ -1,4 +1,4 @@
-package com.entity.eclipse.mixin.movement;
+package com.entity.eclipse.mixin;
 
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;

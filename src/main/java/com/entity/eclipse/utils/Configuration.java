@@ -3,7 +3,6 @@ package com.entity.eclipse.utils;
 import com.entity.eclipse.utils.types.DynamicValue;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 public class Configuration {

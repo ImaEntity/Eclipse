@@ -4,6 +4,7 @@ import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.utils.types.DynamicValue;
+import com.entity.eclipse.utils.types.ListValue;
 import org.apache.commons.io.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +31,19 @@ public class SaveManager {
 
         stream.write(config.getAll().size());
         for(String key : config.getAll()) {
-            String value = config.get(key).toString();
+            DynamicValue<?> rawValue = config.getRaw(key);
+            StringBuilder value = new StringBuilder(rawValue.getValue().toString());
+
+            if(rawValue instanceof ListValue list) {
+                value = new StringBuilder();
+
+                for(DynamicValue<?> element : list.getValue())
+                    value.append(element.getValue().toString()).append(',');
+
+                value.reverse();
+                value.deleteCharAt(0);
+                value.reverse();
+            }
 
             stream.write(key.length() >> 8);
             stream.write(key.length() & 0xFF);
@@ -38,7 +51,7 @@ public class SaveManager {
 
             stream.write(value.length() >> 8);
             stream.write(value.length() & 0xFF);
-            stream.writeBytes(value.getBytes());
+            stream.writeBytes(value.toString().getBytes());
         }
 
         return stream.toByteArray();
@@ -125,8 +138,8 @@ public class SaveManager {
             int moduleCount = stream.read();
             for(int i = 0; i < moduleCount; i++) {
                 short nameLength = (short) (stream.read() << 8 | stream.read());
-
                 String name = new String(stream.readNBytes(nameLength));
+
                 Module module = ModuleManager.getByName(name);
 
                 int keybindCode = stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();

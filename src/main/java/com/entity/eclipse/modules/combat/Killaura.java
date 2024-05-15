@@ -65,14 +65,16 @@ public class Killaura extends Module {
         if(Eclipse.client.world == null) return;
         if(Eclipse.client.interactionManager == null) return;
 
-        for(Map.Entry<Entity, Integer> entry : this.delays.entrySet())
-            this.delays.put(entry.getKey(), entry.getValue() + 1);
+        this.delays.replaceAll((k, v) -> v + 1);
 
         ArrayList<Entity> withinRange = new ArrayList<>();
 
         for(Entity entity : Eclipse.client.world.getEntities()) {
             if(entity == Eclipse.client.player) continue;
+            if(!entity.isAlive()) continue;
+            if(!entity.isAttackable()) continue;
 
+            // Fuck
             if(!((ListValue) this.config.getRaw("Entities")).contains(entity.getType())) continue;
 
             if(entity.distanceTo(Eclipse.client.player) <= (float) this.config.get("Range"))
@@ -101,6 +103,8 @@ public class Killaura extends Module {
         int delay = this.delays.getOrDefault(closestEntity, defaultDelay);
 
         if(delay < defaultDelay) return;
+
+        // TODO: Look at the entity before attacking
 
         Eclipse.client.interactionManager.attackEntity(Eclipse.client.player, closestEntity);
         this.delays.put(closestEntity, 0);

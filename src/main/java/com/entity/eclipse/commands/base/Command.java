@@ -22,4 +22,9 @@ public abstract class Command {
     }
 
     public abstract void onExecute(String[] args);
+
+    @Override
+    public String toString() {
+        return "§6" + this.name + "§r";
+    }
 }

@@ -1,4 +1,4 @@
-package com.entity.eclipse.mixin.events;
+package com.entity.eclipse.mixin;
 
 import com.entity.eclipse.utils.Ticker;
 import com.entity.eclipse.utils.events.Events;

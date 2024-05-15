@@ -1,33 +1,21 @@
-package com.entity.eclipse.modules.misc;
+package com.entity.eclipse.modules.movement;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.Events;
-import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.types.DynamicValue;
+import com.entity.eclipse.utils.types.DoubleValue;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.HashMap;
+public class LongJump extends Module {
+    public LongJump() {
+        super("LongJump", "big jump", ModuleType.MOVEMENT);
 
-public class Test extends Module {
-    private HashMap<String, DynamicValue<?>> data = new HashMap<>();
-
-    public Test() {
-        super("Test", "idfk", ModuleType.MISC);
-
-        Events.Packet.register(PacketEvents.SEND, event -> {
-            if(!this.isEnabled()) return;
-        });
-
-        Events.Packet.register(PacketEvents.RECEIVE, event -> {
-            if(!this.isEnabled()) return;
-        });
+        this.config.create("Multiplier", new DoubleValue(1.0));
     }
 
     @Override
-    public void tick(   ) {
+    public void tick() {
         if(Eclipse.client.player == null) return;
 
         if(Eclipse.client.player.isOnGround()) return;
@@ -37,7 +25,7 @@ public class Test extends Module {
         if(Eclipse.client.player.getVelocity().horizontalLength() < 0.1) return;
 
         Vec3d lookDir = Vec3d.fromPolar(0, Eclipse.client.player.getYaw());
-        double speed = 2;
+        double speed = this.config.get("Multiplier");
 
         Eclipse.client.player.setVelocity(
                 lookDir.getX() * speed,

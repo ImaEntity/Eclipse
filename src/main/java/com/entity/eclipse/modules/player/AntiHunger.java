@@ -1,7 +1,7 @@
 package com.entity.eclipse.modules.player;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.mixin.network.IPlayerMoveC2SPacket;
+import com.entity.eclipse.mixin.IPlayerMoveC2SPacket;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;

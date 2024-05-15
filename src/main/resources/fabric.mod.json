@@ -16,17 +16,12 @@
 		]
 	},
 	"mixins": [
-		"mixins/main.mixins.json",
-		"mixins/world.mixins.json",
-		"mixins/network.mixins.json",
-		"mixins/movement.mixins.json",
-		"mixins/render.mixins.json",
-		"mixins/events.mixins.json"
+		"eclipse.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.10",
-		"minecraft": "~1.20.5",
-		"java": ">=21",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
 		"fabric-api": "*"
 	}
 }

@@ -1,0 +1,29 @@
+{
+	"required": true,
+	"package": "com.entity.eclipse.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"AbstractBlockStateMixin",
+		"BlockCollisionSpliteratorMixin",
+		"BlockMixin",
+		"BlockModelRendererMixin",
+		"ClientBrandRetrieverMixin",
+		"ClientConnectionMixin",
+		"ClientPlayerEntityMixin",
+		"ClientPlayerInteractionManagerMixin",
+		"ClientPlayNetworkHandlerMixin",
+		"FluidRendererMixin",
+		"IEntityVelocityUpdateS2CPacketMixin",
+		"ILivingEntityMixin",
+		"IPlayerMoveC2SPacket",
+		"ItemStackMixin",
+		"LivingEntityMixin",
+		"MinecraftClientMixin",
+		"PlayerEntityMixin",
+		"SimpleOptionMixin",
+		"WindowMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

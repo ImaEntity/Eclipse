@@ -1,15 +1,13 @@
 package com.entity.eclipse.modules.movement;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.mixin.network.IPlayerMoveC2SPacket;
+import com.entity.eclipse.mixin.IPlayerMoveC2SPacket;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.Strings;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.types.DoubleValue;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class NoFall extends Module {
@@ -32,6 +30,7 @@ public class NoFall extends Module {
                 return;
             }
 
+            if(Eclipse.client.player.fallDistance < 2.5) return;
             if(Eclipse.client.player.getVelocity().getY() > -0.5) return;
             if(Eclipse.client.player.isFallFlying()) return;
 
