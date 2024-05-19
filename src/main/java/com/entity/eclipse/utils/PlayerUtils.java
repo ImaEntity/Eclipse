@@ -63,7 +63,7 @@ public class PlayerUtils {
         if(
                 !Eclipse.client.player.isAlive() ||
                 !lastAttacked.isAlive() ||
-                lastAttacked.distanceTo(Eclipse.client.player) > 16
+                lastAttacked.distanceTo(Eclipse.client.player) > 8
         ) {
             lastAttacked = null;
             return null;

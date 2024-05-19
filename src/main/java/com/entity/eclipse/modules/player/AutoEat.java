@@ -13,6 +13,8 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.Item;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class AutoEat extends Module {
     private boolean eating = false;
     private int prevSlot = Slots.INVALID_SLOT;
@@ -21,7 +23,7 @@ public class AutoEat extends Module {
     public AutoEat() {
         super("AutoEat", "Automatically eats food.", ModuleType.PLAYER);
 
-        this.config.create("AllowInventory", new BooleanValue(true));
+        this.config.create("AllowInventory", new BooleanValue(false));
         this.config.create("HealthThreshold", new FloatValue(10f));
         this.config.create("HungerThreshold", new FloatValue(15f));
         this.config.create("BlacklistedItems", new ListValue(
@@ -41,32 +43,31 @@ public class AutoEat extends Module {
     private int findFood() {
         if(Eclipse.client.player == null) return Slots.INVALID_SLOT;
 
-        int startSlot = this.config.get("AllowInventory") ?
+        int endSlot = this.config.get("AllowInventory") ?
                 Slots.MAIN.end() :
                 Slots.HOTBAR.end();
 
-        int slot = Slots.INVALID_SLOT;
-        int bestNutrition = -1;
+        AtomicInteger bestNutrition = new AtomicInteger(-1);
+        int slot = Slots.findFirst(
+                new Slots.Range(Slots.HOTBAR.start(), endSlot),
+                item -> {
+                    FoodComponent food = item.getComponents().get(DataComponentTypes.FOOD);
 
-        // This works only because the hotbar and main inventory
-        // just happen to be stored right next to each other
-        for(int i = startSlot; i >= Slots.HOTBAR.start(); i--) {
-            Item item = Eclipse.client.player.getInventory().getStack(i).getItem();
-            FoodComponent food = item.getComponents().get(DataComponentTypes.FOOD);
+                    if(food == null) return false;
+                    if(food.nutrition() < bestNutrition.get()) return false;
+                    if(((ListValue) this.config.getRaw("BlacklistedItems")).contains(item)) return false;
 
-            if(food == null) continue;
-            if(food.nutrition() < bestNutrition) continue;
-            if(((ListValue) this.config.getRaw("BlacklistedItems")).contains(item)) continue;
+                    bestNutrition.set(food.nutrition());
 
-            slot = i;
-            bestNutrition = food.nutrition();
-        }
+                    return true;
+                }
+        );
 
         Item offhand = Eclipse.client.player.getOffHandStack().getItem();
         FoodComponent food = offhand.getComponents().get(DataComponentTypes.FOOD);
 
         if(food == null) return slot;
-        if(food.nutrition() < bestNutrition) return slot;
+        if(food.nutrition() < bestNutrition.get()) return slot;
         if(((ListValue) this.config.getRaw("BlacklistedItems")).contains(offhand)) return slot;
 
         return Slots.OFFHAND;

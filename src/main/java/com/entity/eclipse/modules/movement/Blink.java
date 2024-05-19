@@ -8,6 +8,7 @@ import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.common.KeepAliveC2SPacket;
+import org.apache.logging.log4j.core.LifeCycle;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,10 @@ public class Blink extends Module {
         super("Blink", "Delays outgoing packets", ModuleType.MOVEMENT);
 
         Events.Packet.register(PacketEvents.SEND, event -> {
+            if(Eclipse.client.player == null) return;
+
             if(!this.isEnabled()) return;
+
             if(event.getPacket() instanceof KeepAliveC2SPacket) return;
 
             this.queue.add(event.getPacket());

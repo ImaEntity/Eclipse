@@ -6,7 +6,7 @@ public class StringValue extends DynamicValue<String> {
     public static Class<?> typeClass = String.class;
 
     public StringValue() {
-        this.value = "§8[EMPTY_STRING]§r";
+        this.value = "";
     }
     public StringValue(String value) {
         super(value);

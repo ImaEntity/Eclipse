@@ -19,8 +19,6 @@ public class LivingEntityMixin {
     @Inject(method = "onAttacking", at = @At("HEAD"))
     public void setLastAttacking(Entity entity, CallbackInfo info) {
         if(!this.equals(Eclipse.client.player)) return;
-
-        Eclipse.notifyUser("Acking");
         PlayerUtils.setLastAttacked(entity);
     }
 

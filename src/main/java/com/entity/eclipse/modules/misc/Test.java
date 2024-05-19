@@ -7,7 +7,9 @@ import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.DynamicValue;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
 
@@ -27,23 +29,10 @@ public class Test extends Module {
     }
 
     @Override
-    public void tick(   ) {
+    public void tick() {
         if(Eclipse.client.player == null) return;
 
-        if(Eclipse.client.player.isOnGround()) return;
-        if(Eclipse.client.player.isTouchingWater()) return;
-        if(Eclipse.client.player.isInLava()) return;
-        if(Eclipse.client.player.isClimbing()) return;
-        if(Eclipse.client.player.getVelocity().horizontalLength() < 0.1) return;
-
-        Vec3d lookDir = Vec3d.fromPolar(0, Eclipse.client.player.getYaw());
-        double speed = 2;
-
-        Eclipse.client.player.setVelocity(
-                lookDir.getX() * speed,
-                Eclipse.client.player.getVelocity().getY(),
-                lookDir.getZ() * speed
-        );
+        Eclipse.client.player.damage(null, 0.01f);
     }
 
     @Override
