@@ -36,7 +36,12 @@ public class BlockValue extends DynamicValue<Block> {
     }
 
     @Override
+    public String toRawString() {
+        return Registries.BLOCK.getId(this.value).getPath();
+    }
+
+    @Override
     public String toString() {
-        return Strings.format(Registries.BLOCK.getId(this.value).getPath());
+        return Strings.format(this.toRawString());
     }
 }

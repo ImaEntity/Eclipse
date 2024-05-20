@@ -8,10 +8,7 @@ import com.entity.eclipse.modules.movement.*;
 import com.entity.eclipse.modules.network.AntiPacketKick;
 import com.entity.eclipse.modules.player.AntiHunger;
 import com.entity.eclipse.modules.player.AutoEat;
-import com.entity.eclipse.modules.render.DamagePerSecond;
-import com.entity.eclipse.modules.render.Freecam;
-import com.entity.eclipse.modules.render.Fullbright;
-import com.entity.eclipse.modules.render.Xray;
+import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.AirPlace;
 import com.entity.eclipse.modules.world.FastUse;
 import com.entity.eclipse.modules.world.LawnMower;
@@ -40,6 +37,7 @@ public class ModuleManager {
         modules.add(new AutoTotem());
         modules.add(new AutoLog());
         modules.add(new Criticals());
+//        modules.add(new CrystalAura());
         modules.add(new Killaura());
         modules.add(new Knockback());
 
@@ -65,9 +63,11 @@ public class ModuleManager {
 
         // Render
 
+        modules.add(new AntiBlind());
         modules.add(new DamagePerSecond());
-        modules.add(new Freecam());
+//        modules.add(new Freecam());
         modules.add(new Fullbright());
+        modules.add(new ModuleList());
         modules.add(new Xray());
 
         // World

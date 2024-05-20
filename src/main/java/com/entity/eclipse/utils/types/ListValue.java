@@ -1,5 +1,7 @@
 package com.entity.eclipse.utils.types;
 
+import com.entity.eclipse.Eclipse;
+
 import java.util.ArrayList;
 
 public class ListValue extends DynamicValue<ArrayList<DynamicValue<?>>> {
@@ -41,6 +43,9 @@ public class ListValue extends DynamicValue<ArrayList<DynamicValue<?>>> {
     public ListValue fromString(String value) {
         ArrayList<DynamicValue<?>> list = new ArrayList<>();
         String[] values = value.split(",");
+
+        Eclipse.log(value);
+        Eclipse.log(this.elementClass.getSimpleName());
 
         for(String val : values) {
             try {
@@ -110,6 +115,23 @@ public class ListValue extends DynamicValue<ArrayList<DynamicValue<?>>> {
     public void setValue(Object value) {
         if(!(value instanceof ArrayList)) return;
         this.value = (ArrayList<DynamicValue<?>>) value;
+    }
+
+    @Override
+    public String toRawString() {
+        StringBuilder str = new StringBuilder();
+
+        if(this.value.size() == 0)
+            return "";
+
+        for(DynamicValue<?> value : this.value)
+            str.append(value.toRawString()).append(',');
+
+        str.reverse();
+        str.deleteCharAt(0);
+        str.reverse();
+
+        return str.toString();
     }
 
     @Override

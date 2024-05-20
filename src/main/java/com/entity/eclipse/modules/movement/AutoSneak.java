@@ -49,10 +49,12 @@ public class AutoSneak extends Module {
             }
         }
 
-        Eclipse.client.options.sneakKey.setPressed(false);
+        Eclipse.client.player.setSneaking(
+                Eclipse.client.options.sneakKey.isPressed()
+        );
 
         if(this.allowedToSneak() && shouldSneak)
-            Eclipse.client.options.sneakKey.setPressed(true);
+            Eclipse.client.player.setSneaking(true);
     }
 
     @Override

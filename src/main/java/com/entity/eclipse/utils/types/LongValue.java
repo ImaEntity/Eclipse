@@ -25,6 +25,11 @@ public class LongValue extends DynamicValue<Long> {
     }
 
     @Override
+    public String toRawString() {
+        return Long.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

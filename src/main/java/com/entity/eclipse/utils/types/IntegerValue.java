@@ -25,6 +25,11 @@ public class IntegerValue extends DynamicValue<Integer> {
     }
 
     @Override
+    public String toRawString() {
+        return Integer.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

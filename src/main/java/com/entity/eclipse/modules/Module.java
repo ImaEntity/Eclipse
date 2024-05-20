@@ -13,7 +13,6 @@ public abstract class Module {
     public Keybind keybind;
     public Configuration config;
 
-
     public Module(String name, String description, ModuleType type) {
         this.name = name;
         this.description = description;

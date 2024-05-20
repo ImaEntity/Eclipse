@@ -25,6 +25,11 @@ public class ByteValue extends DynamicValue<Byte> {
     }
 
     @Override
+    public String toRawString() {
+        return Byte.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

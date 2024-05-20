@@ -7,11 +7,15 @@ import com.entity.eclipse.utils.Strings;
 import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.DynamicValue;
 import com.entity.eclipse.utils.types.ListValue;
+import com.entity.eclipse.utils.types.StringValue;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -104,13 +108,17 @@ public class ModuleSettingsGUI extends Screen {
                 return super.keyPressed(keyCode, scanCode, modifiers);
 
             String textToAppend = new StringBuilder().appendCodePoint(keyCode).toString();
-            boolean shifted = (modifiers & GLFW.GLFW_MOD_SHIFT) == GLFW.GLFW_MOD_SHIFT;
             char c = textToAppend.charAt(0);
+
+            boolean shifted = (modifiers & GLFW.GLFW_MOD_SHIFT) == GLFW.GLFW_MOD_SHIFT;
+
+            // Add ctrl a/c/v/backspace
+            boolean hasControl = (modifiers & GLFW.GLFW_MOD_CONTROL) == GLFW.GLFW_MOD_CONTROL;
 
             textToAppend = textToAppend.toLowerCase();
 
             if(shifted) {
-                if(c > 'a' && c < 'z') textToAppend = textToAppend.toUpperCase();
+                if(c > 'A' && c < 'Z') textToAppend = textToAppend.toUpperCase();
                 else if(c == '`') textToAppend = "~";
                 else if(c == '1') textToAppend = "!";
                 else if(c == '2') textToAppend = "@";
@@ -466,6 +474,7 @@ public class ModuleSettingsGUI extends Screen {
 
             String settingValue = value.toString();
             int valueWidth = this.textRenderer.getWidth(settingValue);
+            int color = 0xFFFFFF;
 
             if(this.valueSettingName.equals(settingName)) {
                 settingValue = this.keyboardInput;
@@ -480,12 +489,18 @@ public class ModuleSettingsGUI extends Screen {
                 );
             }
 
+            if(settingValue.equalsIgnoreCase("§7§r")) {
+                settingValue = "[EMPTY_STRING]";
+                valueWidth = this.textRenderer.getWidth(settingValue);
+                color = 0x555555;
+            }
+
             context.drawTextWithShadow(
                     this.textRenderer,
                     settingValue,
                     (int) (right - this.padding - valueWidth),
                     (int) y,
-                    0xFFFFFF
+                    color
             );
 
             y += this.textRenderer.fontHeight + this.padding;

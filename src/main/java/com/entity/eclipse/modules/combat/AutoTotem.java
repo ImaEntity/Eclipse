@@ -8,7 +8,6 @@ import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.screen.slot.SlotActionType;
 
 public class AutoTotem extends Module {
     public AutoTotem() {
@@ -30,21 +29,13 @@ public class AutoTotem extends Module {
 
         if(destination.getItem() == Items.TOTEM_OF_UNDYING) return;
 
-        int sourceIndex = -1;
-
-        for(int i = 0; i < Eclipse.client.player.getInventory().size(); i++) {
-            ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
-
-            if(stack.getItem() == Items.TOTEM_OF_UNDYING) {
-                sourceIndex = i;
-                break;
-            }
-        }
-
-        if(sourceIndex == -1) return;
+        int sourceIndex = Slots.findFirst(
+                Slots.ALL,
+                item -> item == Items.TOTEM_OF_UNDYING
+        );
 
         int sourceSlot = Slots.indexToID(sourceIndex);
-        int destSlot = isMainHand ? Eclipse.client.player.getInventory().selectedSlot + 36 : Slots.OFFHAND;
+        int destSlot = isMainHand ? Slots.getSelectedID() : Slots.indexToID(Slots.OFFHAND);
 
         Slots.swap(sourceSlot, destSlot);
     }

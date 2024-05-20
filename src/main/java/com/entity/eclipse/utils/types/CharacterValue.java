@@ -25,6 +25,11 @@ public class CharacterValue extends DynamicValue<Character> {
     }
 
     @Override
+    public String toRawString() {
+        return Character.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

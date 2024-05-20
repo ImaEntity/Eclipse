@@ -25,6 +25,11 @@ public class FloatValue extends DynamicValue<Float> {
     }
 
     @Override
+    public String toRawString() {
+        return Float.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

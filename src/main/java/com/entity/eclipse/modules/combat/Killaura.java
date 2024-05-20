@@ -3,15 +3,12 @@ package com.entity.eclipse.modules.combat;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.Strings;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Killaura extends Module {
     private final HashMap<Entity, Integer> delays = new HashMap<>();
@@ -28,7 +25,9 @@ public class Killaura extends Module {
                 "blaze",
                 "cave_spider",
                 "creeper",
+                "drowned",
                 "elder_guardian",
+                "enderman",
                 "endermite",
                 "ender_dragon",
                 "evoker",
@@ -38,6 +37,7 @@ public class Killaura extends Module {
                 "husk",
                 "magma_cube",
                 "phantom",
+                "piglin",
                 "piglin_brute",
                 "pillager",
                 "ravager",

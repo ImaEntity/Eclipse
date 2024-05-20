@@ -25,6 +25,11 @@ public class ShortValue extends DynamicValue<Short> {
     }
 
     @Override
+    public String toRawString() {
+        return Short.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

@@ -38,4 +38,8 @@ public class DynamicValue<T> implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    public String toRawString() {
+        return this.value.toString();
+    }
 }

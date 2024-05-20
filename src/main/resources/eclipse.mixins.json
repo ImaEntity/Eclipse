@@ -15,13 +15,15 @@
 		"FluidRendererMixin",
 		"IEntityVelocityUpdateS2CPacketMixin",
 		"ILivingEntityMixin",
+		"InGameHudMixin",
 		"IPlayerMoveC2SPacket",
 		"ItemStackMixin",
 		"LivingEntityMixin",
 		"MinecraftClientMixin",
 		"PlayerEntityMixin",
 		"SimpleOptionMixin",
-		"WindowMixin"
+		"WindowMixin",
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

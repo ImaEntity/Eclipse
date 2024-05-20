@@ -36,6 +36,11 @@ public class ItemValue extends DynamicValue<Item> {
     }
 
     @Override
+    public String toRawString() {
+        return Registries.ITEM.getId(this.value).getPath();
+    }
+
+    @Override
     public String toString() {
         return Strings.format(Registries.ITEM.getId(this.value).getPath());
     }

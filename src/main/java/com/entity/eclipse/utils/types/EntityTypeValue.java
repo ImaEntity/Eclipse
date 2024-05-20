@@ -35,6 +35,11 @@ public class EntityTypeValue extends DynamicValue<EntityType<?>> {
     }
 
     @Override
+    public String toRawString() {
+        return Registries.ENTITY_TYPE.getId(this.value).getPath();
+    }
+
+    @Override
     public String toString() {
         return Strings.format(Registries.ENTITY_TYPE.getId(this.value).getPath());
     }

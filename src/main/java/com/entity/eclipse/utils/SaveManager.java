@@ -4,14 +4,12 @@ import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.utils.types.DynamicValue;
-import com.entity.eclipse.utils.types.ListValue;
 import org.apache.commons.io.FileUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -32,18 +30,7 @@ public class SaveManager {
         stream.write(config.getAll().size());
         for(String key : config.getAll()) {
             DynamicValue<?> rawValue = config.getRaw(key);
-            StringBuilder value = new StringBuilder(rawValue.getValue().toString());
-
-            if(rawValue instanceof ListValue list) {
-                value = new StringBuilder();
-
-                for(DynamicValue<?> element : list.getValue())
-                    value.append(element.getValue().toString()).append(',');
-
-                value.reverse();
-                value.deleteCharAt(0);
-                value.reverse();
-            }
+            String value = rawValue.toRawString();
 
             stream.write(key.length() >> 8);
             stream.write(key.length() & 0xFF);
@@ -51,7 +38,7 @@ public class SaveManager {
 
             stream.write(value.length() >> 8);
             stream.write(value.length() & 0xFF);
-            stream.writeBytes(value.toString().getBytes());
+            stream.writeBytes(value.getBytes());
         }
 
         return stream.toByteArray();
@@ -142,6 +129,11 @@ public class SaveManager {
 
                 Module module = ModuleManager.getByName(name);
 
+                if(module == null) {
+                    Eclipse.log("Failed to find module: " + name);
+                    continue;
+                }
+
                 int keybindCode = stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();
                 boolean keybindIsKey = stream.read() == 1;
 
@@ -157,7 +149,15 @@ public class SaveManager {
                     short valueLength = (short) (stream.read() << 8 | stream.read());
                     String value = new String(stream.readNBytes(valueLength));
 
-                    module.config.set(key, value);
+                    if(name.equalsIgnoreCase("LawnMower")) {
+                        Eclipse.log(key);
+                        Eclipse.log(value);
+                    }
+
+                    module.config.create(
+                            key,
+                            module.config.getRaw(key).fromString(value)
+                    );
                 }
             }
 

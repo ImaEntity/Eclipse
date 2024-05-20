@@ -27,33 +27,32 @@ public class Flight extends Module {
         if(Eclipse.client.getNetworkHandler() == null) return;
 
         GameOptions options = Eclipse.client.options;
-        float yaw = Eclipse.client.player.getYaw();
-        int back = 0;
-        int y = 0;
+        int forward = 0;
+        int up = 0;
         int right = 0;
 
-        if(options.jumpKey.isPressed()) y++;
-        if(options.sneakKey.isPressed()) y--;
-        if(options.backKey.isPressed()) back++;
-        if(options.forwardKey.isPressed()) back--;
+        if(options.jumpKey.isPressed()) up++;
+        if(options.sneakKey.isPressed()) up--;
+        if(options.forwardKey.isPressed()) forward++;
+        if(options.backKey.isPressed()) forward--;
         if(options.rightKey.isPressed()) right++;
         if(options.leftKey.isPressed()) right--;
 
-        double halfSpeed = options.sprintKey.isPressed() ?
-                ((double) this.config.get("Speed") * (double) this.config.get("SprintMultiplier")) / 2 :
-                (double) this.config.get("Speed") / 2;
+        double speed = options.sprintKey.isPressed() ?
+                (double) this.config.get("Speed") * (double) this.config.get("SprintMultiplier") :
+                (double) this.config.get("Speed");
 
-        double sin = Math.sin(Math.toRadians(yaw));
-        double cos = Math.cos(Math.toRadians(yaw));
-        double newX = halfSpeed * back * sin;
-        double newZ = halfSpeed * back * -cos;
-        double newY = halfSpeed * y;
+        double forwardYaw = Math.toRadians(Eclipse.client.player.getYaw() + 90);
+        double rightYaw = Math.toRadians(Eclipse.client.player.getYaw() + 180);
 
-        newX += halfSpeed * right * -cos;
-        newZ += halfSpeed * right * -sin;
+        double xMove = speed / 2 * forward * Math.cos(forwardYaw) + speed / 2 * right * Math.cos(rightYaw);
+        double zMove = speed / 2 * forward * Math.sin(forwardYaw) + speed / 2 * right * Math.sin(rightYaw);
 
-        Vec3d newVel = new Vec3d(newX, newY, newZ);
-        Eclipse.client.player.setVelocity(newVel);
+        Eclipse.client.player.setVelocity(
+                speed * xMove,
+                speed * up,
+                speed * zMove
+        );
 
         this.bypassTimer++;
 

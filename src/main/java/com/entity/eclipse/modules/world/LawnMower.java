@@ -8,7 +8,6 @@ import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.IntegerValue;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 

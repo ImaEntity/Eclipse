@@ -25,6 +25,11 @@ public class BooleanValue extends DynamicValue<Boolean> {
     }
 
     @Override
+    public String toRawString() {
+        return Boolean.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

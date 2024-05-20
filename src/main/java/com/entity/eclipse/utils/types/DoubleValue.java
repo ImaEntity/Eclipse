@@ -25,6 +25,11 @@ public class DoubleValue extends DynamicValue<Double> {
     }
 
     @Override
+    public String toRawString() {
+        return Double.toString(this.value);
+    }
+
+    @Override
     public String toString() {
         return Strings.format(this.value);
     }

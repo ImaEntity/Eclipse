@@ -14,13 +14,15 @@ public class Sprint extends Module {
     public void tick() {
         if(Eclipse.client.player == null) return;
 
-        Eclipse.client.options.sprintKey.setPressed(false);
+        Eclipse.client.player.setSprinting(
+                Eclipse.client.options.sprintKey.isPressed()
+        );
 
         if(!Eclipse.client.options.forwardKey.isPressed()) return;
         if(Eclipse.client.options.backKey.isPressed()) return;
         if(Eclipse.client.player.horizontalCollision) return;
 
-        Eclipse.client.options.sprintKey.setPressed(true);
+        Eclipse.client.player.setSprinting(true);
     }
 
     @Override
