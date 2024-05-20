@@ -68,7 +68,7 @@ public class Flight extends Module {
 
     @Override
     public void onEnable() {
-        this.bypassTimer = 0;
+        this.bypassTimer =  0;
     }
 
     @Override

@@ -36,6 +36,8 @@ public class VClip extends Command {
             return;
         }
 
+        Eclipse.notifyUser(Boolean.toString(hasPacketLimit));
+
         int grounds = (int) Math.ceil(Math.abs(height) / 10);
         if(grounds > 20 && !hasPacketLimit) grounds = 1;
 
