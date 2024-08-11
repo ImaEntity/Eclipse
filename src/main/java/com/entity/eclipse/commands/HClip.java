@@ -11,6 +11,8 @@ public class HClip extends Command {
     }
 
     public static void clip(double distance) {
+        if(Eclipse.client.player == null) return;
+
         Vec3d forward = Vec3d.fromPolar(0, Eclipse.client.player.getYaw());
 
         if(Eclipse.client.player.hasVehicle()) {

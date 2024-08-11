@@ -1,7 +1,6 @@
 package com.entity.eclipse.utils;
 
 import com.entity.eclipse.Eclipse;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.SlotActionType;
 import org.lwjgl.glfw.GLFW;

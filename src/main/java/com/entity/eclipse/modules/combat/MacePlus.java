@@ -1,7 +1,6 @@
 package com.entity.eclipse.modules.combat;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.commands.VClip;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;

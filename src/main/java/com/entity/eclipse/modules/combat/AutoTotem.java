@@ -9,10 +9,6 @@ import com.entity.eclipse.utils.types.BooleanValue;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 public class AutoTotem extends Module {
     public AutoTotem() {
         super("AutoTotem", "Automatically puts totems in one of your hands.", ModuleType.COMBAT);

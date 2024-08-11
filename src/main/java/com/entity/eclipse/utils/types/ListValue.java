@@ -1,7 +1,5 @@
 package com.entity.eclipse.utils.types;
 
-import com.entity.eclipse.Eclipse;
-
 import java.util.ArrayList;
 
 public class ListValue extends DynamicValue<ArrayList<DynamicValue<?>>> {

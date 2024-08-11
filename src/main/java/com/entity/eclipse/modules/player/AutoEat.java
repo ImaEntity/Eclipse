@@ -5,7 +5,6 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.modules.combat.Killaura;
-import com.entity.eclipse.modules.misc.Test;
 import com.entity.eclipse.utils.Slots;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.BooleanValue;

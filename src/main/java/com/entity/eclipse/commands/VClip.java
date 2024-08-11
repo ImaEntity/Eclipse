@@ -11,6 +11,9 @@ public class VClip extends Command {
     }
 
     public static void clip(double height, boolean hasPacketLimit) {
+        if(Eclipse.client.player == null) return;
+        if(Eclipse.client.getNetworkHandler() == null) return;
+
         int grounds = (int) Math.ceil(Math.abs(height) / 10);
         if(grounds > 20 && !hasPacketLimit) grounds = 1;
 

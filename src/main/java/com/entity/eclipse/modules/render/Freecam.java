@@ -2,7 +2,6 @@ package com.entity.eclipse.modules.render;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
-import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 

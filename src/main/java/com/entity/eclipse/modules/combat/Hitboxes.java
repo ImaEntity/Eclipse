@@ -4,12 +4,11 @@ import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.types.*;
+import com.entity.eclipse.utils.types.DoubleValue;
+import com.entity.eclipse.utils.types.EntityTypeValue;
+import com.entity.eclipse.utils.types.ListValue;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Box;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Hitboxes extends Module {
     public Hitboxes() {

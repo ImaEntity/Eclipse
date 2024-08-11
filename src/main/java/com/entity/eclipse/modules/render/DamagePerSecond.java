@@ -8,15 +8,9 @@ import com.entity.eclipse.utils.events.lore.LoreEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.item.Item;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 
 public class DamagePerSecond extends Module {

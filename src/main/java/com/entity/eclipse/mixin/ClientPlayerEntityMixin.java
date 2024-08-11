@@ -1,8 +1,5 @@
 package com.entity.eclipse.mixin;
 
-import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.modules.ModuleManager;
-import com.entity.eclipse.modules.combat.Reach;
 import com.entity.eclipse.utils.Ticker;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.tick.TickEvent;
@@ -12,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {

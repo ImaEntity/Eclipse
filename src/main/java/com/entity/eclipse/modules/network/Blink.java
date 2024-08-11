@@ -8,7 +8,6 @@ import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.common.KeepAliveC2SPacket;
-import org.apache.logging.log4j.core.LifeCycle;
 
 import java.util.ArrayList;
 
