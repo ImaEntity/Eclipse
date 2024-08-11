@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class Flight extends Module {
     private int bypassTimer = 0;
+    private double prevSpeed = 0;
 
     public Flight() {
         super("Flight", "fly", ModuleType.MOVEMENT);
@@ -19,6 +20,7 @@ public class Flight extends Module {
         this.config.create("Speed", new DoubleValue(1.0));
         this.config.create("SprintMultiplier", new DoubleValue(2.0));
         this.config.create("BypassInterval", new IntegerValue(10));
+        this.config.create("Acceleration", new DoubleValue(0.25));
     }
 
     @Override
@@ -38,9 +40,12 @@ public class Flight extends Module {
         if(options.rightKey.isPressed()) right++;
         if(options.leftKey.isPressed()) right--;
 
-        double speed = options.sprintKey.isPressed() ?
+        double maxSpeed = options.sprintKey.isPressed() ?
                 (double) this.config.get("Speed") * (double) this.config.get("SprintMultiplier") :
                 (double) this.config.get("Speed");
+
+        double speed = Math.min(this.prevSpeed + (double) this.config.get("Acceleration"), maxSpeed);
+        this.prevSpeed = speed;
 
         double forwardYaw = Math.toRadians(Eclipse.client.player.getYaw() + 90);
         double rightYaw = Math.toRadians(Eclipse.client.player.getYaw() + 180);

@@ -6,8 +6,11 @@ import com.entity.eclipse.modules.misc.BrandSpoof;
 import com.entity.eclipse.modules.misc.Test;
 import com.entity.eclipse.modules.movement.*;
 import com.entity.eclipse.modules.network.AntiPacketKick;
+import com.entity.eclipse.modules.network.Blink;
+import com.entity.eclipse.modules.network.PacketLoss;
 import com.entity.eclipse.modules.player.AntiHunger;
 import com.entity.eclipse.modules.player.AutoEat;
+import com.entity.eclipse.modules.player.AutoTool;
 import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.AirPlace;
 import com.entity.eclipse.modules.world.FastUse;
@@ -38,14 +41,16 @@ public class ModuleManager {
         modules.add(new AutoLog());
         modules.add(new Criticals());
 //        modules.add(new CrystalAura());
+        modules.add(new Hitboxes());
         modules.add(new Killaura());
         modules.add(new Knockback());
+        modules.add(new MacePlus());
+        modules.add(new Reach());
 
         // Movement
 
         modules.add(new AirJump());
         modules.add(new AutoSneak());
-        modules.add(new Blink());
         modules.add(new Flight());
         modules.add(new Jesus());
         modules.add(new LongJump());
@@ -60,6 +65,7 @@ public class ModuleManager {
 
         modules.add(new AntiHunger());
         modules.add(new AutoEat());
+        modules.add(new AutoTool());
 
         // Render
 
@@ -79,6 +85,8 @@ public class ModuleManager {
         // Network
 
         modules.add(new AntiPacketKick());
+        modules.add(new Blink());
+        modules.add(new PacketLoss());
 
         // Misc
 
@@ -101,6 +109,8 @@ public class ModuleManager {
         }
 
         for(Module module : activeModules) {
+            if(!module.isEnabled()) continue;
+
             try {
                 module.tick();
             } catch(Exception e) {
@@ -113,13 +123,17 @@ public class ModuleManager {
     }
 
     public static void renderWorld(RenderEvent event) {
-        for(Module module : activeModules)
+        for(Module module : activeModules) {
+            if(!module.isEnabled()) continue;
             module.renderWorld(event);
+        }
     }
 
     public static void renderScreen(RenderEvent event) {
-        for(Module module : activeModules)
+        for(Module module : activeModules) {
+            if(!module.isEnabled()) continue;
             module.renderScreen(event);
+        }
     }
 
     public static ArrayList<Module> getModules() {
@@ -151,7 +165,7 @@ public class ModuleManager {
     }
 
     public static void enable(Module module) {
-        if(module.enabled) return;
+        if(module.isEnabled()) return;
 
         activeModules.add(module);
         Eclipse.notifyUser("Enabled " + module);
@@ -161,7 +175,7 @@ public class ModuleManager {
     }
 
     public static void disable(Module module) {
-        if(!module.enabled) return;
+        if(!module.isEnabled()) return;
 
         activeModules.remove(module);
         Eclipse.notifyUser("Disabled " + module);
@@ -173,5 +187,15 @@ public class ModuleManager {
     public static void toggle(Module module) {
         if(!module.isEnabled()) enable(module);
         else disable(module);
+    }
+
+    public static void tempEnable(Module module) {
+        module.enabled = true;
+    }
+    public static void tempDisable(Module module) {
+        module.enabled = false;
+    }
+    public static void revertTemp(Module module) {
+        module.enabled = activeModules.contains(module);
     }
 }

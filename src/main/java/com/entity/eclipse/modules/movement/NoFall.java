@@ -30,8 +30,6 @@ public class NoFall extends Module {
                 return;
             }
 
-            if(Eclipse.client.player.fallDistance < 2.5) return;
-            if(Eclipse.client.player.getVelocity().getY() > -0.5) return;
             if(Eclipse.client.player.isFallFlying()) return;
 
             ((IPlayerMoveC2SPacket) event.getPacket()).setOnGround(true);

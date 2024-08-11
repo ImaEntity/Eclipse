@@ -1,4 +1,4 @@
-package com.entity.eclipse.modules.movement;
+package com.entity.eclipse.modules.network;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
@@ -16,7 +16,7 @@ public class Blink extends Module {
     private final ArrayList<Packet<?>> queue = new ArrayList<>();
 
     public Blink() {
-        super("Blink", "Delays outgoing packets", ModuleType.MOVEMENT);
+        super("Blink", "Delays outgoing packets.", ModuleType.NETWORK);
 
         Events.Packet.register(PacketEvents.SEND, event -> {
             if(Eclipse.client.player == null) return;

@@ -149,11 +149,6 @@ public class SaveManager {
                     short valueLength = (short) (stream.read() << 8 | stream.read());
                     String value = new String(stream.readNBytes(valueLength));
 
-                    if(name.equalsIgnoreCase("LawnMower")) {
-                        Eclipse.log(key);
-                        Eclipse.log(value);
-                    }
-
                     module.config.create(
                             key,
                             module.config.getRaw(key).fromString(value)

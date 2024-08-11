@@ -15,7 +15,7 @@ import java.util.Collections;
 
 public class AutoTotem extends Module {
     public AutoTotem() {
-        super("AutoTotem", "Automatically puts totems in one of your hands", ModuleType.COMBAT);
+        super("AutoTotem", "Automatically puts totems in one of your hands.", ModuleType.COMBAT);
 
         this.config.create("HoldInMainHand", new BooleanValue(false));
     }
@@ -35,7 +35,7 @@ public class AutoTotem extends Module {
 
         int sourceIndex = Slots.findFirst(
                 Slots.ALL,
-                item -> item == Items.TOTEM_OF_UNDYING
+                stack -> stack.getItem() == Items.TOTEM_OF_UNDYING
         );
 
         int sourceSlot = Slots.indexToID(sourceIndex);

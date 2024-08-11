@@ -44,9 +44,6 @@ public class ListValue extends DynamicValue<ArrayList<DynamicValue<?>>> {
         ArrayList<DynamicValue<?>> list = new ArrayList<>();
         String[] values = value.split(",");
 
-        Eclipse.log(value);
-        Eclipse.log(this.elementClass.getSimpleName());
-
         for(String val : values) {
             try {
                 // All because I don't want a list type for every class

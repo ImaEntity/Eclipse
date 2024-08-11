@@ -5,9 +5,13 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityPose;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 
 public class AutoSneak extends Module {
     public AutoSneak() {
@@ -49,12 +53,10 @@ public class AutoSneak extends Module {
             }
         }
 
-        Eclipse.client.player.setSneaking(
-                Eclipse.client.options.sneakKey.isPressed()
-        );
+        Eclipse.client.options.sneakKey.setPressed(false);
 
         if(this.allowedToSneak() && shouldSneak)
-            Eclipse.client.player.setSneaking(true);
+            Eclipse.client.options.sneakKey.setPressed(true);
     }
 
     @Override

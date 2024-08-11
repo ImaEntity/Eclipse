@@ -11,7 +11,12 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.item.Item;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 
 public class DamagePerSecond extends Module {
@@ -28,7 +33,7 @@ public class DamagePerSecond extends Module {
             Text attackDamageText = null;
             double attackSpeed = Eclipse.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_SPEED);
             double attackDamage = Eclipse.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) +
-                    EnchantmentHelper.getAttackDamage(event.getParent(), null);
+                    0f; // This is supposed to take enchantments into account.
 
             AttributeModifiersComponent component = event.getParent().getOrDefault(
                     DataComponentTypes.ATTRIBUTE_MODIFIERS,
@@ -40,7 +45,7 @@ public class DamagePerSecond extends Module {
             for(AttributeModifiersComponent.Entry entry : component.modifiers()) {
                 EntityAttributeModifier modifier = entry.modifier();
 
-                if(modifier.uuid() == Item.ATTACK_DAMAGE_MODIFIER_ID) {
+                if(modifier.id() == Item.BASE_ATTACK_DAMAGE_MODIFIER_ID) {
                     attackDamage += modifier.value();
                     attackDamageText = Text.translatable(
                             "attribute.modifier.equals." + modifier.operation().getId(),
@@ -49,7 +54,7 @@ public class DamagePerSecond extends Module {
                     );
                 }
 
-                if(modifier.uuid() == Item.ATTACK_SPEED_MODIFIER_ID) {
+                if(modifier.id() == Item.BASE_ATTACK_SPEED_MODIFIER_ID) {
                     attackSpeed += modifier.value();
                     attackSpeedText = Text.translatable(
                             "attribute.modifier.equals." + modifier.operation().getId(),

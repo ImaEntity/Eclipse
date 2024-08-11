@@ -2,10 +2,13 @@ package com.entity.eclipse.utils;
 
 import com.entity.eclipse.Eclipse;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.SlotActionType;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public class Slots {
@@ -36,14 +39,38 @@ public class Slots {
         return indexToID(Eclipse.client.player.getInventory().selectedSlot);
     }
 
-    public static int findFirst(Range range, Function<Item, Boolean> filter) {
+    public static int findBest(Range range, Function<ItemStack, Double> criteria) {
+        if(Eclipse.client.player == null) return INVALID_SLOT;
+
+        HashMap<Integer, Double> slots = new HashMap<>();
+
+        for(int i = range.end(); i >= range.start(); i--) {
+            ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
+            slots.put(i, criteria.apply(stack));
+        }
+
+        int bestSlot = INVALID_SLOT;
+        double bestScore = Double.NaN;
+        for(Map.Entry<Integer, Double> entry : slots.entrySet()) {
+            if(Double.isNaN(entry.getValue())) continue;
+
+            if(entry.getValue() > bestScore || Double.isNaN(bestScore)) {
+                bestSlot = entry.getKey();
+                bestScore = entry.getValue();
+            }
+        }
+
+        return bestSlot;
+    }
+
+    public static int findFirst(Range range, Function<ItemStack, Boolean> filter) {
         if(Eclipse.client.player == null) return INVALID_SLOT;
 
         ArrayList<Integer> slotIndices = new ArrayList<>();
 
         for(int i = range.end(); i >= range.start(); i--) {
-            Item item = Eclipse.client.player.getInventory().getStack(i).getItem();
-            if(!filter.apply(item)) continue;
+            ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
+            if(!filter.apply(stack)) continue;
 
             slotIndices.add(i);
         }

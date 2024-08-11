@@ -42,6 +42,7 @@ public class LawnMower extends Module {
         this.blocksToBreak.add(Blocks.DEAD_BUSH);
         this.blocksToBreak.add(Blocks.SUNFLOWER);
         this.blocksToBreak.add(Blocks.FERN);
+        this.blocksToBreak.add(Blocks.LARGE_FERN);
     }
 
     @Override

@@ -10,34 +10,7 @@ public class VClip extends Command {
         super("VClip", "Vertical teleportation.", "vclip");
     }
 
-    @Override
-    public void onExecute(String[] args) {
-        if(Eclipse.client.player == null) return;
-        if(Eclipse.client.getNetworkHandler() == null) return;
-
-        if(args.length == 0) {
-            Eclipse.notifyUser("Syntax: vclip <height> [removePacketLimit]");
-            return;
-        }
-
-        double height;
-        boolean hasPacketLimit = true;
-
-        try {
-            height = Double.parseDouble(args[0]);
-            if(args.length > 1)
-                hasPacketLimit = !Boolean.parseBoolean(args[1]);
-        } catch(NumberFormatException | NullPointerException e) {
-            e.printStackTrace();
-
-            // parseBoolean never throws an exception
-            Eclipse.notifyUser("Invalid height!");
-
-            return;
-        }
-
-        Eclipse.notifyUser(Boolean.toString(hasPacketLimit));
-
+    public static void clip(double height, boolean hasPacketLimit) {
         int grounds = (int) Math.ceil(Math.abs(height) / 10);
         if(grounds > 20 && !hasPacketLimit) grounds = 1;
 
@@ -70,5 +43,34 @@ public class VClip extends Command {
                 Eclipse.client.player.getY() + height,
                 Eclipse.client.player.getZ()
         );
+    }
+
+    @Override
+    public void onExecute(String[] args) {
+        if(Eclipse.client.player == null) return;
+        if(Eclipse.client.getNetworkHandler() == null) return;
+
+        if(args.length == 0) {
+            Eclipse.notifyUser("Syntax: vclip <height> [removePacketLimit]");
+            return;
+        }
+
+        double height;
+        boolean hasPacketLimit = true;
+
+        try {
+            height = Double.parseDouble(args[0]);
+            if(args.length > 1)
+                hasPacketLimit = !Boolean.parseBoolean(args[1]);
+        } catch(NumberFormatException | NullPointerException e) {
+            e.printStackTrace();
+
+            // parseBoolean never throws an exception
+            Eclipse.notifyUser("Invalid height!");
+
+            return;
+        }
+
+        VClip.clip(height, hasPacketLimit);
     }
 }

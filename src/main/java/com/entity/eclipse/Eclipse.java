@@ -8,6 +8,7 @@ import com.entity.eclipse.utils.events.tick.TickEvents;
 import com.entity.eclipse.utils.types.StringValue;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
@@ -18,6 +19,15 @@ import org.slf4j.LoggerFactory;
 public class Eclipse implements ModInitializer {
 	public static final String MOD_ID = "eclipse";
 	public static final String MOD_NAME = "Eclipse";
+	public static final String VERSION = "v" + FabricLoader
+			.getInstance()
+			.getModContainer(MOD_ID)
+			.orElseThrow(() -> new RuntimeException("Wtf???"))
+			.getMetadata()
+			.getVersion()
+			.getFriendlyString()
+			.split("\\+")[0];
+
 	public static MinecraftClient client = MinecraftClient.getInstance();
 	public static Configuration config = new Configuration();
 
@@ -33,7 +43,9 @@ public class Eclipse implements ModInitializer {
 	}
 
 	public static void notifyUser(String message) {
-		if(client.player == null) return;
+		if(client.player == null)
+			return;
+
 		client.player.sendMessage(Text.of("[§6§lEcl§0§lipse§r] " + message), false);
 	}
 

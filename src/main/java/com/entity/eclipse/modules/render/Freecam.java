@@ -18,15 +18,20 @@ public class Freecam extends Module {
 
     @Override
     public void onEnable() {
-        Eclipse.notifyUser("idfk it broke one day, and never worked since");
-        Eclipse.notifyUser("ill fix it eventually");
+        if(Eclipse.client.cameraEntity == null) return;
+        if(Eclipse.client.player == null) return;
 
-        ModuleManager.disable(this);
+        Eclipse.client.cameraEntity.noClip = true;
+        Eclipse.client.player.noClip = true;
     }
 
     @Override
     public void onDisable() {
+        if(Eclipse.client.cameraEntity == null) return;
+        if(Eclipse.client.player == null) return;
 
+        Eclipse.client.cameraEntity.noClip = false;
+        Eclipse.client.player.noClip = false;
     }
 
     @Override

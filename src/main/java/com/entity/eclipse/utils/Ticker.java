@@ -13,4 +13,7 @@ public class Ticker {
     public static void queue(Runnable action) {
         actions.add(action);
     }
+    public static boolean isQueueEmpty() {
+        return actions.isEmpty();
+    }
 }

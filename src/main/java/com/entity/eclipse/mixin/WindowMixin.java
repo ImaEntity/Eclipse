@@ -1,5 +1,6 @@
 package com.entity.eclipse.mixin;
 
+import com.entity.eclipse.Eclipse;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
@@ -12,7 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class WindowMixin {
 	@Inject(at = @At("HEAD"), method = "setTitle", cancellable = true)
 	public void setTitle(String title, CallbackInfo info) {
-		GLFW.glfwSetWindowTitle(MinecraftClient.getInstance().getWindow().getHandle(), title + " - Eclipse 1.0.0");
+		GLFW.glfwSetWindowTitle(
+				MinecraftClient.getInstance().getWindow().getHandle(),
+				title + " - Eclipse " + Eclipse.VERSION
+		);
+
 		info.cancel();
 	}
 }

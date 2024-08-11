@@ -2,7 +2,10 @@ package com.entity.eclipse.modules.player;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
+import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
+import com.entity.eclipse.modules.combat.Killaura;
+import com.entity.eclipse.modules.misc.Test;
 import com.entity.eclipse.utils.Slots;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
@@ -48,18 +51,19 @@ public class AutoEat extends Module {
                 Slots.HOTBAR.end();
 
         AtomicInteger bestNutrition = new AtomicInteger(-1);
-        int slot = Slots.findFirst(
+        int slot = Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                item -> {
+                stack -> {
+                    Item item = stack.getItem();
                     FoodComponent food = item.getComponents().get(DataComponentTypes.FOOD);
 
-                    if(food == null) return false;
-                    if(food.nutrition() < bestNutrition.get()) return false;
-                    if(((ListValue) this.config.getRaw("BlacklistedItems")).contains(item)) return false;
+                    if(food == null) return Double.NaN;
+                    if(food.nutrition() < bestNutrition.get()) return Double.NaN;
+                    if(((ListValue) this.config.getRaw("BlacklistedItems")).contains(item)) return Double.NaN;
 
                     bestNutrition.set(food.nutrition());
 
-                    return true;
+                    return (double) food.nutrition();
                 }
         );
 
@@ -89,6 +93,8 @@ public class AutoEat extends Module {
 
         this.slot = Slots.INVALID_SLOT;
         this.prevSlot = Slots.INVALID_SLOT;
+
+        ModuleManager.revertTemp(ModuleManager.getByClass(Killaura.class));
     }
 
     private void startEating() {
@@ -100,13 +106,16 @@ public class AutoEat extends Module {
         this.eating = true;
         this.prevSlot = Eclipse.client.player.getInventory().selectedSlot;
 
+        ModuleManager.tempDisable(ModuleManager.getByClass(Killaura.class));
+
         if(!Slots.HOTBAR.contains(this.slot)) {
             Slots.swap(
                     Slots.indexToID(this.slot),
                     Slots.getSelectedID()
             );
-        } else
+        } else {
             Eclipse.client.player.getInventory().selectedSlot = this.slot;
+        }
 
         Eclipse.client.options.useKey.setPressed(true);
     }
