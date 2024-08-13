@@ -71,7 +71,7 @@ public class CrystalAura extends Module {
 
         int blockSlot = Slots.findFirst(
                 new Slots.Range(startSlot, Slots.MAIN.end()),
-                item -> ((ListValue) this.config.getRaw("JunkBlocks")).contains(item)
+                stack -> slotIdx -> ((ListValue) this.config.getRaw("JunkBlocks")).contains(stack.getItem())
         );
 
         Slots.swap(Slots.indexToID(blockSlot), Slots.getSelectedID());

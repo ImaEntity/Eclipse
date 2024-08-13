@@ -52,7 +52,7 @@ public class AutoEat extends Module {
         AtomicInteger bestNutrition = new AtomicInteger(-1);
         int slot = Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> {
+                stack -> slotIdx -> {
                     Item item = stack.getItem();
                     FoodComponent food = item.getComponents().get(DataComponentTypes.FOOD);
 
@@ -93,7 +93,9 @@ public class AutoEat extends Module {
         this.slot = Slots.INVALID_SLOT;
         this.prevSlot = Slots.INVALID_SLOT;
 
-        ModuleManager.revertTemp(ModuleManager.getByClass(Killaura.class));
+        Module killaura = ModuleManager.getByClass(Killaura.class);
+        if(killaura != null)
+            ModuleManager.revertTemp(killaura);
     }
 
     private void startEating() {
@@ -105,7 +107,9 @@ public class AutoEat extends Module {
         this.eating = true;
         this.prevSlot = Eclipse.client.player.getInventory().selectedSlot;
 
-        ModuleManager.tempDisable(ModuleManager.getByClass(Killaura.class));
+        Module killaura = ModuleManager.getByClass(Killaura.class);
+        if(killaura != null)
+            ModuleManager.tempDisable(killaura);
 
         if(!Slots.HOTBAR.contains(this.slot)) {
             Slots.swap(

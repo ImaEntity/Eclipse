@@ -114,9 +114,20 @@ public class AutoTool extends Module {
                 Slots.MAIN.end() :
                 Slots.HOTBAR.end();
 
-        return Slots.findFirst(
+        return Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> !stack.isDamageable()
+                stack -> slotIdx -> {
+                    if(stack.isDamageable())
+                        return Double.NaN;
+
+                    float score = 0f;
+
+                    score += stack.isEmpty() ? 5f : 0f;
+                    if(!stack.isEmpty() && Slots.MAIN.contains(slotIdx))
+                        score -= 10f;
+
+                    return (double) score;
+                }
         );
     }
 
@@ -132,7 +143,7 @@ public class AutoTool extends Module {
 
         int slot = Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> {
+                stack -> slotIdx -> {
                     float score = calculateScore(stack, state);
                     if(Float.isNaN(score)) return (double) Float.NaN;
 

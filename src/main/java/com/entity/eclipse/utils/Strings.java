@@ -7,7 +7,7 @@ public class Strings {
     }
 
     public static String format(boolean value) {
-        return Strings.format(value, "true", "false");
+        return Strings.format(value, "✔", "❌");
     }
     public static String format(byte value) {
         return "§d§l" + value + "§r";

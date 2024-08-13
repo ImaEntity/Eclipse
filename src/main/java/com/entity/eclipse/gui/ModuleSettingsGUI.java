@@ -7,15 +7,16 @@ import com.entity.eclipse.utils.Strings;
 import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.DynamicValue;
 import com.entity.eclipse.utils.types.ListValue;
-import com.entity.eclipse.utils.types.StringValue;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -57,6 +58,17 @@ public class ModuleSettingsGUI extends Screen {
         return false;
     }
 
+    public String getClipboard() {
+        try {
+            return (String) Toolkit
+                    .getDefaultToolkit()
+                    .getSystemClipboard()
+                    .getData(DataFlavor.stringFlavor);
+        } catch (UnsupportedFlavorException | IOException ignored) {
+            return "";
+        }
+    }
+
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(this.listeningForKey) {
@@ -79,8 +91,17 @@ public class ModuleSettingsGUI extends Screen {
                 return false;
             }
 
-            if(keyCode == GLFW.GLFW_KEY_BACKSPACE && this.keyboardInput.length() > 0)
+            boolean shifted = (modifiers & GLFW.GLFW_MOD_SHIFT) == GLFW.GLFW_MOD_SHIFT;
+
+            // Add ctrl a/c/v/backspace
+            boolean hasControl = (modifiers & GLFW.GLFW_MOD_CONTROL) == GLFW.GLFW_MOD_CONTROL;
+
+            if(keyCode == GLFW.GLFW_KEY_BACKSPACE && this.keyboardInput.length() > 0) {
                 this.keyboardInput = this.keyboardInput.substring(0, this.keyboardInput.length() - 1);
+
+                if(hasControl)
+                    this.keyboardInput = "";
+            }
 
             if(keyCode == GLFW.GLFW_KEY_ENTER) {
                 this.listeningForValue = false;
@@ -104,18 +125,28 @@ public class ModuleSettingsGUI extends Screen {
                 return false;
             }
 
-            if(GLFW.glfwGetKeyName(keyCode, scanCode) == null)
+            if(GLFW.glfwGetKeyName(keyCode, scanCode) == null && keyCode != GLFW.GLFW_KEY_SPACE)
                 return super.keyPressed(keyCode, scanCode, modifiers);
 
             String textToAppend = new StringBuilder().appendCodePoint(keyCode).toString();
             char c = textToAppend.charAt(0);
 
-            boolean shifted = (modifiers & GLFW.GLFW_MOD_SHIFT) == GLFW.GLFW_MOD_SHIFT;
-
-            // Add ctrl a/c/v/backspace
-            boolean hasControl = (modifiers & GLFW.GLFW_MOD_CONTROL) == GLFW.GLFW_MOD_CONTROL;
-
             textToAppend = textToAppend.toLowerCase();
+
+            if(hasControl) {
+                shifted = false;
+
+                if(c == 'V') textToAppend = getClipboard();
+                if(c == '\0')
+                    Toolkit
+                            .getDefaultToolkit()
+                            .getSystemClipboard()
+                            .setContents(new StringSelection(
+                                    this.module.config
+                                            .getRaw(this.valueSettingName)
+                                            .toRawString()
+                            ), null);
+            }
 
             if(shifted) {
                 if(c > 'A' && c < 'Z') textToAppend = textToAppend.toUpperCase();

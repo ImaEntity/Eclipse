@@ -38,14 +38,14 @@ public class Slots {
         return indexToID(Eclipse.client.player.getInventory().selectedSlot);
     }
 
-    public static int findBest(Range range, Function<ItemStack, Double> criteria) {
+    public static int findBest(Range range, Function<ItemStack, Function<Integer, Double>> criteria) {
         if(Eclipse.client.player == null) return INVALID_SLOT;
 
         HashMap<Integer, Double> slots = new HashMap<>();
 
         for(int i = range.end(); i >= range.start(); i--) {
             ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
-            slots.put(i, criteria.apply(stack));
+            slots.put(i, criteria.apply(stack).apply(i));
         }
 
         int bestSlot = INVALID_SLOT;
@@ -62,14 +62,14 @@ public class Slots {
         return bestSlot;
     }
 
-    public static int findFirst(Range range, Function<ItemStack, Boolean> filter) {
+    public static int findFirst(Range range, Function<ItemStack, Function<Integer, Boolean>> filter) {
         if(Eclipse.client.player == null) return INVALID_SLOT;
 
         ArrayList<Integer> slotIndices = new ArrayList<>();
 
         for(int i = range.end(); i >= range.start(); i--) {
             ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
-            if(!filter.apply(stack)) continue;
+            if(!filter.apply(stack).apply(i)) continue;
 
             slotIndices.add(i);
         }

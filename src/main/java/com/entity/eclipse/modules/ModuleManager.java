@@ -13,6 +13,7 @@ import com.entity.eclipse.modules.player.AutoEat;
 import com.entity.eclipse.modules.player.AutoTool;
 import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.AirPlace;
+import com.entity.eclipse.modules.world.BridgeBuilder;
 import com.entity.eclipse.modules.world.FastUse;
 import com.entity.eclipse.modules.world.LawnMower;
 import com.entity.eclipse.utils.events.*;
@@ -79,6 +80,7 @@ public class ModuleManager {
         // World
 
         modules.add(new AirPlace());
+        modules.add(new BridgeBuilder());
         modules.add(new FastUse());
         modules.add(new LawnMower());
 

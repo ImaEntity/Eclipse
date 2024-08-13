@@ -5,12 +5,11 @@ import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.types.DynamicValue;
 
 import java.util.HashMap;
 
 public class Test extends Module {
-    private HashMap<String, DynamicValue<?>> data = new HashMap<>();
+    private HashMap<String, Object> data = new HashMap<>();
 
     public Test() {
         super("Test", "idfk", ModuleType.MISC);
@@ -26,16 +25,11 @@ public class Test extends Module {
 
     @Override
     public void tick() {
-//        if(!Ticker.isQueueEmpty()) return;
-//
-//        CommandManager
-//                .getByClass(com.entity.eclipse.commands.Test.class)
-//                .onExecute(new String[0]);
+
     }
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
