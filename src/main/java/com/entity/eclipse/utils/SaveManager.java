@@ -47,6 +47,9 @@ public class SaveManager {
     public static void saveState() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
+        // Version
+        stream.write(3);
+
         stream.writeBytes(configToBytes(Eclipse.config));
 
         stream.write(ModuleManager.getModules().size());
@@ -63,6 +66,7 @@ public class SaveManager {
             stream.write(module.keybind.getCode() & 0xFF);
 
             stream.write(module.keybind.isKey() ? 1 : 0);
+            stream.write(module.keybind.togglesOnRelease() ? 1 : 0);
 
             stream.writeBytes(configToBytes(module.config));
         }
@@ -90,6 +94,7 @@ public class SaveManager {
 
         try {
             FileUtils.writeByteArrayToFile(configFile, compressedBytes);
+            Eclipse.log("Saved client configs!");
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -99,7 +104,7 @@ public class SaveManager {
         try {
             Inflater inflater = new Inflater();
             byte[] compressedBytes = FileUtils.readFileToByteArray(configFile);
-            byte[] tempOut = new byte[4096];
+            byte[] tempOut = new byte[4096]; // This is dumb
 
             inflater.setInput(compressedBytes);
             int inflatedSize = inflater.inflate(tempOut);
@@ -110,6 +115,8 @@ public class SaveManager {
             System.arraycopy(tempOut, 0, uncompressedBytes, 0, inflatedSize);
 
             ByteArrayInputStream stream = new ByteArrayInputStream(uncompressedBytes);
+
+            int version = stream.read();
 
             int optionCount = stream.read();
             for(int i = 0; i < optionCount; i++) {
@@ -136,10 +143,11 @@ public class SaveManager {
 
                 int keybindCode = stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();
                 boolean keybindIsKey = stream.read() == 1;
+                boolean keybindTOR = version < 3 && stream.read() == 1;
 
                 module.keybind = keybindIsKey ?
-                        Keybind.key(keybindCode) :
-                        Keybind.mouse(keybindCode);
+                        Keybind.key(keybindCode, keybindTOR) :
+                        Keybind.mouse(keybindCode, keybindTOR);
 
                 int moduleOptionCount = stream.read();
                 for(int j = 0; j < moduleOptionCount; j++) {
@@ -164,6 +172,8 @@ public class SaveManager {
 
                 ModuleManager.queueEnable(module);
             }
+
+            Eclipse.log("Loaded client configs!");
         } catch(Exception e) {
             e.printStackTrace();
         }

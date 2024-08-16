@@ -6,22 +6,28 @@ import org.lwjgl.glfw.GLFW;
 
 public class Keybind {
     private final int code;
+    private final boolean tor;
     private final boolean isKey;
-    private boolean wasPressed;
+    private boolean wasPressed0;
+    private boolean wasPressed1;
 
-    private Keybind(int code, boolean isKey) {
+    private Keybind(int code, boolean isKey, boolean tor) {
         this.code = code;
         this.isKey = isKey;
+        this.tor = tor;
     }
 
     public static Keybind unbound() {
-        return new Keybind(GLFW.GLFW_KEY_UNKNOWN, true);
+        return new Keybind(GLFW.GLFW_KEY_UNKNOWN, true, false);
     }
-    public static Keybind key(int code) {
-        return new Keybind(code, true);
+    public static Keybind key(int code, boolean tor) {
+        return new Keybind(code, true, tor);
     }
-    public static Keybind mouse(int button) {
-        return new Keybind(button, false);
+    public static Keybind mouse(int button, boolean tor) {
+        return new Keybind(button, false, tor);
+    }
+    public boolean togglesOnRelease() {
+        return this.tor;
     }
 
     public static boolean canBindTo(int code, boolean isKey) {
@@ -59,13 +65,30 @@ public class Keybind {
 
         boolean isHeld = this.isHeld();
 
-        if(isHeld && !this.wasPressed) {
-            this.wasPressed = true;
+        if(isHeld && !this.wasPressed0) {
+            this.wasPressed0 = true;
             return true;
         }
 
         if(!isHeld)
-            this.wasPressed = false;
+            this.wasPressed0 = false;
+
+        return false;
+    }
+
+    public boolean wasPressed() {
+        if(Eclipse.client.currentScreen != null) return false;
+        if(this.code < 0) return false;
+
+        boolean isHeld = this.isHeld();
+
+        if(!isHeld && this.wasPressed1) {
+            this.wasPressed1 = false;
+            return true;
+        }
+
+        if(isHeld)
+            this.wasPressed1 = true;
 
         return false;
     }

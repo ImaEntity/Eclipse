@@ -110,7 +110,7 @@ public class ClickGUI extends Screen {
                 Module module = ourModules.get(j);
 
                 String formattedName = Strings.camelToReadable(module.getName());
-                String enabledString = module.isEnabled() ? "✔" : "❌";
+                String enabledString = "§l" + (module.isEnabled() ? "✔" : "❌") + "§r";
 
                 int textWidth = this.textRenderer.getWidth(enabledString);
                 double y = this.padding * 3 + (this.textRenderer.fontHeight + this.padding) * (j + 1);

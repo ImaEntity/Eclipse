@@ -1,15 +1,12 @@
-package com.entity.eclipse.modules.movement;
+package com.entity.eclipse.modules.render;
 
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.types.BooleanValue;
 
-public class SafeWalk extends Module {
-    public SafeWalk() {
-        super("SafeWalk", "Doesn't let you fall of the edge of blocks.", ModuleType.MOVEMENT);
-
-        this.config.create("SafeWalkInLiquid", new BooleanValue(false));
+public class ItemInfo extends Module {
+    public ItemInfo() {
+        super("ItemInfo", "Shows info about your held item in the bottom left.", ModuleType.RENDER);
     }
 
     @Override

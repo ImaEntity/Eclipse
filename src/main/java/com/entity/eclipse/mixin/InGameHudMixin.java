@@ -1,11 +1,11 @@
 package com.entity.eclipse.mixin;
 
-import com.entity.eclipse.Eclipse;
+import com.entity.eclipse.gui.modules.ItemInfoGUI;
+import com.entity.eclipse.gui.modules.ModuleListGUI;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
+import com.entity.eclipse.modules.render.ItemInfo;
 import com.entity.eclipse.modules.render.ModuleList;
-import com.entity.eclipse.utils.Strings;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
@@ -18,39 +18,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class InGameHudMixin {
     @Inject(method = "render", at = @At("TAIL"))
     private void overlayModules(DrawContext context, RenderTickCounter counter, CallbackInfo info) {
-        if(!ModuleManager.getByClass(ModuleList.class).isEnabled()) return;
+        Module moduleList = ModuleManager.getByClass(ModuleList.class);
+        Module itemInfo = ModuleManager.getByClass(ItemInfo.class);
 
-        TextRenderer textRenderer = Eclipse.client.textRenderer;
-        int width = context.getScaledWindowWidth();
-        int height = context.getScaledWindowHeight();
+        if(moduleList == null) return;
+        if(itemInfo == null) return;
 
-        int fontHeight = textRenderer.fontHeight;
-        int offY = 0;
-        int padding = 3;
+        if(moduleList.isEnabled())
+            ModuleListGUI.render(context, counter);
 
-        for(Module module : ModuleManager.getActiveModules()) {
-            String name = Strings.camelToReadable(module.getName());
-            int nameWidth = textRenderer.getWidth(name);
-
-            context.fill(
-                    width,
-                    height - offY,
-                    width - padding - nameWidth - padding,
-                    height - offY - padding - fontHeight - padding,
-                    0xEE000000
-            );
-
-            context.drawTextWithShadow(
-                    textRenderer,
-                    name,
-                    width - padding - nameWidth,
-                    height - padding - offY - fontHeight,
-                    0xFFAA00
-            );
-
-            offY += padding;
-            offY += fontHeight;
-            offY += padding;
-        }
+        if(itemInfo.isEnabled())
+            ItemInfoGUI.render(context, counter);
     }
 }

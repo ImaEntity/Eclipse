@@ -35,6 +35,12 @@ public class MacePlus extends Module {
             ModuleManager.tempDisable(noFall);
 
             Vec3d pos = Eclipse.client.player.getPos();
+            int grounds = (int) Math.ceil(Math.abs(
+                    (double) this.config.get("DropDistance")
+            ) / 10);
+
+            for(int i = 0; i < grounds - 1; i++)
+                Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(false));
 
             Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                     pos.getX(),
@@ -42,6 +48,9 @@ public class MacePlus extends Module {
                     pos.getZ(),
                     false
             ));
+
+            for(int i = 0; i < grounds - 1; i++)
+                Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(false));
 
             Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                     pos.getX(),

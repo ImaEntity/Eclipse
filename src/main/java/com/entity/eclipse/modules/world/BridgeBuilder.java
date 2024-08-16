@@ -24,6 +24,8 @@ import java.util.ArrayList;
 public class BridgeBuilder extends Module {
     private ArrayList<BlockPos> breakingPos = new ArrayList<>();
     private ArrayList<Direction> breakingDir = new ArrayList<>();
+    private ArrayList<Runnable> breakingAct = new ArrayList<>();
+
     private int breakingQueueLength = 0;
 
     public BridgeBuilder() {
@@ -42,6 +44,44 @@ public class BridgeBuilder extends Module {
         ));
     }
 
+    private void queueBreak(BlockPos pos, Direction direction) {
+        queueBreakThen(pos, direction, null);
+    }
+
+    private void queueBreakThen(BlockPos pos, Direction direction, Runnable next) {
+        Ticker.queue(() -> {
+            this.breakingPos.add(pos);
+            this.breakingDir.add(direction);
+            this.breakingAct.add(next);
+
+            this.breakingQueueLength++;
+        });
+    }
+
+    private void queuePlace(Hand hand, BlockPos pos, Direction direction) {
+        queuePlaceThen(hand, pos, direction, null);
+    }
+
+    private void queuePlaceThen(Hand hand, BlockPos pos, Direction direction, Runnable next) {
+        if(Eclipse.client.interactionManager == null) return;
+
+        Ticker.queue(() -> {
+            Eclipse.client.interactionManager.interactBlock(
+                    Eclipse.client.player,
+                    hand,
+                    new BlockHitResult(
+                            Vec3d.of(pos),
+                            direction,
+                            pos,
+                            true
+                    )
+            );
+
+            if(next != null)
+                Ticker.queue(null);
+        });
+    }
+
     @Override
     public void tick() {
         if(Eclipse.client.player == null) return;
@@ -57,6 +97,10 @@ public class BridgeBuilder extends Module {
             if(!keepAttacking) {
                 this.breakingPos.removeFirst();
                 this.breakingDir.removeFirst();
+
+                Runnable next = this.breakingAct.removeFirst();
+                if(next != null)
+                    Ticker.queue(next);
 
                 this.breakingQueueLength--;
             }
@@ -136,21 +180,18 @@ public class BridgeBuilder extends Module {
                     .getBlockState(targetPos)
                     .getBlock();
 
-            if(!(block instanceof AirBlock))
+            boolean isAir = block instanceof AirBlock;
+            boolean isSolid = block.getDefaultState().isSolidBlock(null, targetPos);
+
+            if(!isAir && isSolid)
                 continue;
 
-            Ticker.queue(() -> {
-                Eclipse.client.interactionManager.interactBlock(
-                        Eclipse.client.player,
-                        hand,
-                        new BlockHitResult(
-                                Vec3d.of(refPos),
-                                facing,
-                                refPos,
-                                true
-                        )
-                );
-            });
+            if(!isSolid && !isAir) {
+                queueBreakThen(targetPos, facing, () -> queuePlace(hand, refPos, facing));
+                continue;
+            }
+
+            queuePlace(hand, refPos, facing);
         }
 
         for(int y = -1; y <= 1; y++) {
@@ -170,13 +211,7 @@ public class BridgeBuilder extends Module {
                 if(block instanceof AirBlock)
                     continue;
 
-
-                Ticker.queue(() -> {
-                    this.breakingPos.add(targetPos);
-                    this.breakingDir.add(facing);
-
-                    this.breakingQueueLength++;
-                });
+                queueBreak(targetPos, facing);
             }
         }
 
@@ -198,6 +233,8 @@ public class BridgeBuilder extends Module {
     public void onEnable() {
         this.breakingPos = new ArrayList<>();
         this.breakingDir = new ArrayList<>();
+        this.breakingAct = new ArrayList<>();
+
         this.breakingQueueLength = 0;
     }
 

@@ -53,8 +53,8 @@ public class Bind extends Command {
         }
 
         module.keybind = code < 8 ?
-                Keybind.mouse(code) :
-                Keybind.key(code);
+                Keybind.mouse(code, false) :
+                Keybind.key(code, false);
 
         String formattedKey = Strings.format(module.keybind.toString());
 

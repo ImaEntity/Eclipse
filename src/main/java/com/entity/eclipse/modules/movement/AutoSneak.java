@@ -4,6 +4,7 @@ import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.types.BooleanValue;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -12,6 +13,8 @@ import net.minecraft.util.math.Vec3d;
 public class AutoSneak extends Module {
     public AutoSneak() {
         super("AutoSneak", "Sneaks on the edges of blocks.", ModuleType.MOVEMENT);
+
+        this.config.create("SneakInLiquid", new BooleanValue(false));
     }
 
     private boolean allowedToSneak() {
@@ -27,6 +30,11 @@ public class AutoSneak extends Module {
     public void tick() {
         if(Eclipse.client.player == null) return;
         if(Eclipse.client.world == null) return;
+
+        if(
+                (boolean) this.config.get("SneakInLiquid") &&
+                (Eclipse.client.player.isTouchingWater() || Eclipse.client.player.isInLava())
+        ) return;
 
         boolean shouldSneak = false;
         Box bounding = Eclipse.client.player.getBoundingBox()

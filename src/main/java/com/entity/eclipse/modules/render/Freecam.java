@@ -3,11 +3,22 @@ package com.entity.eclipse.modules.render;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
+import com.entity.eclipse.utils.events.Events;
+import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Freecam extends Module {
     public Freecam() {
         super("Freecam", "ascend your soul", ModuleType.RENDER);
+
+        Events.Packet.register(PacketEvents.SEND, event -> {
+            if(!this.isEnabled()) return;
+
+            if(!(event.getPacket() instanceof PlayerMoveC2SPacket)) return;
+
+            event.setCancelled(true);
+        });
     }
 
     @Override

@@ -12,10 +12,7 @@ import com.entity.eclipse.modules.player.AntiHunger;
 import com.entity.eclipse.modules.player.AutoEat;
 import com.entity.eclipse.modules.player.AutoTool;
 import com.entity.eclipse.modules.render.*;
-import com.entity.eclipse.modules.world.AirPlace;
-import com.entity.eclipse.modules.world.BridgeBuilder;
-import com.entity.eclipse.modules.world.FastUse;
-import com.entity.eclipse.modules.world.LawnMower;
+import com.entity.eclipse.modules.world.*;
 import com.entity.eclipse.utils.events.*;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.events.render.RenderEvents;
@@ -72,14 +69,18 @@ public class ModuleManager {
 
         modules.add(new AntiBlind());
         modules.add(new DamagePerSecond());
-//        modules.add(new Freecam());
+        modules.add(new Freecam());
         modules.add(new Fullbright());
+        modules.add(new ItemInfo());
         modules.add(new ModuleList());
+        modules.add(new UpsideDown());
         modules.add(new Xray());
+        modules.add(new Zoom());
 
         // World
 
         modules.add(new AirPlace());
+        modules.add(new AutoFarm());
         modules.add(new BridgeBuilder());
         modules.add(new FastUse());
         modules.add(new LawnMower());
@@ -107,6 +108,9 @@ public class ModuleManager {
             if(module.keybind.isUnbound()) continue;
 
             if(module.keybind.isPressed())
+                toggle(module);
+
+            if(module.keybind.togglesOnRelease() && module.keybind.wasPressed())
                 toggle(module);
         }
 

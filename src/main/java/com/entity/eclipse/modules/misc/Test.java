@@ -30,6 +30,7 @@ public class Test extends Module {
 
     @Override
     public void onEnable() {
+
     }
 
     @Override

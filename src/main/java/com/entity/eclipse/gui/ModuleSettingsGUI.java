@@ -73,7 +73,7 @@ public class ModuleSettingsGUI extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(this.listeningForKey) {
             if(Keybind.canBindTo(keyCode, true))
-                this.module.keybind = Keybind.key(keyCode);
+                this.module.keybind = Keybind.key(keyCode, this.module.keybind.togglesOnRelease());
             else
                 this.module.keybind = Keybind.unbound();
 
@@ -109,10 +109,19 @@ public class ModuleSettingsGUI extends Screen {
                 DynamicValue<?> value = this.module.config.getRaw(this.valueSettingName);
 
                 try {
-                    if(value instanceof ListValue list)
-                        list.set(this.valueListIndex, list.get(this.valueListIndex).fromString(this.keyboardInput));
-                    else
-                        this.module.config.create(this.valueSettingName, value.fromString(this.keyboardInput));
+                    if(value instanceof ListValue list) {
+                        list.set(
+                                this.valueListIndex,
+                                list
+                                        .get(this.valueListIndex)
+                                        .fromString(this.keyboardInput)
+                        );
+                    } else {
+                        this.module.config.create(
+                                this.valueSettingName,
+                                value.fromString(this.keyboardInput)
+                        );
+                    }
                 } catch(Exception e) {
                     e.printStackTrace();
                     Eclipse.notifyUser("Invalid value!");
@@ -183,7 +192,7 @@ public class ModuleSettingsGUI extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(this.listeningForKey) {
             if(Keybind.canBindTo(button, false))
-                this.module.keybind = Keybind.mouse(button);
+                this.module.keybind = Keybind.mouse(button, this.module.keybind.togglesOnRelease());
 
             this.listeningForKey = false;
             return false;
@@ -318,21 +327,42 @@ public class ModuleSettingsGUI extends Screen {
         if(!settings.isEmpty())
             y += this.textRenderer.fontHeight + this.padding;
 
-        String keybindString = "Keybind";
-        String keybindText = this.module.keybind.toString();
-        int keybindStringWidth = this.textRenderer.getWidth(keybindString);
-        int keybindTextWidth = this.textRenderer.getWidth(keybindText);
+        String bindString = "bind";
+        String bindText = this.module.keybind.toString();
+        int bindStringWidth = this.textRenderer.getWidth(bindString);
+        int bindTextWidth = this.textRenderer.getWidth(bindText);
 
         if(
                 ((mouseX >= left + this.padding &&
-                mouseX <= left + this.padding + keybindStringWidth) ||
-                (mouseX >= right - this.padding - keybindTextWidth &&
+                mouseX <= left + this.padding + bindStringWidth) ||
+                (mouseX >= right - this.padding - bindTextWidth &&
                 mouseX <= right - this.padding)) &&
                 mouseY >= y &&
                 mouseY <= y + this.textRenderer.fontHeight &&
                 button == GLFW.GLFW_MOUSE_BUTTON_LEFT
         ) {
             this.listeningForKey = true;
+        }
+
+        y += this.textRenderer.fontHeight + this.padding;
+
+        String torString = "Toggle on bind release";
+        String torText = this.module.keybind.toString();
+        int torStringWidth = this.textRenderer.getWidth(torString);
+        int torTextWidth = this.textRenderer.getWidth(torText);
+
+        if(
+                ((mouseX >= left + this.padding &&
+                mouseX <= left + this.padding + torStringWidth) ||
+                (mouseX >= right - this.padding - torTextWidth &&
+                mouseX <= right - this.padding)) &&
+                mouseY >= y &&
+                mouseY <= y + this.textRenderer.fontHeight &&
+                button == GLFW.GLFW_MOUSE_BUTTON_LEFT
+        ) {
+            this.module.keybind = this.module.keybind.isKey() ?
+                    Keybind.key(this.module.keybind.getCode(), !this.module.keybind.togglesOnRelease()) :
+                    Keybind.mouse(this.module.keybind.getCode(), !this.module.keybind.togglesOnRelease());
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -540,12 +570,12 @@ public class ModuleSettingsGUI extends Screen {
         if(!settings.isEmpty())
             y += this.textRenderer.fontHeight + this.padding;
 
-        String keybindText = this.module.keybind.toString();
-        int keybindTextWidth = this.textRenderer.getWidth(keybindText);
+        String bindText = this.module.keybind.toString();
+        int bindTextWidth = this.textRenderer.getWidth(bindText);
 
         context.drawTextWithShadow(
                 this.textRenderer,
-                "Keybind",
+                "Bind",
                 (int) (left + this.padding),
                 (int) y,
                 0xAAAAAA
@@ -553,10 +583,32 @@ public class ModuleSettingsGUI extends Screen {
 
         context.drawTextWithShadow(
                 this.textRenderer,
-                keybindText,
-                (int) (right - this.padding - keybindTextWidth),
+                bindText,
+                (int) (right - this.padding - bindTextWidth),
                 (int) y,
                 0xAAAAAA
+        );
+
+        y += this.textRenderer.fontHeight;
+        y += this.padding;
+
+        String torText = "§l" + (this.module.keybind.togglesOnRelease() ? "✔" : "❌") + "§r";
+        int torTextWidth = this.textRenderer.getWidth(torText);
+
+        context.drawTextWithShadow(
+                this.textRenderer,
+                "Toggle on bind release",
+                (int) (left + this.padding),
+                (int) y,
+                0xAAAAAA
+        );
+
+        context.drawTextWithShadow(
+                this.textRenderer,
+                torText,
+                (int) (right - this.padding - torTextWidth),
+                (int) y,
+                this.module.keybind.togglesOnRelease() ? 0x55FF55 : 0xFF5555
         );
 
         y += this.textRenderer.fontHeight;

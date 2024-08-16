@@ -1,5 +1,6 @@
 package com.entity.eclipse.mixin;
 
+import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.combat.Reach;
@@ -14,8 +15,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerEntityMixin {
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     protected void shouldSafeWalk(CallbackInfoReturnable<Boolean> info) {
+        if(Eclipse.client.player == null) return;
+
         Module safeWalk = ModuleManager.getByClass(SafeWalk.class);
         if(safeWalk == null) return;
+
+        if(
+                (boolean) safeWalk.config.get("SafeWalkInLiquid") &&
+                (Eclipse.client.player.isTouchingWater() || Eclipse.client.player.isInLava())
+        ) return;
 
         if(safeWalk.isEnabled())
             info.setReturnValue(true);
