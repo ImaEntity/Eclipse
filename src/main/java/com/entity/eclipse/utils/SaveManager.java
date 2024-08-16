@@ -117,6 +117,7 @@ public class SaveManager {
             ByteArrayInputStream stream = new ByteArrayInputStream(uncompressedBytes);
 
             int version = stream.read();
+            Eclipse.log("Save version: " + version);
 
             int optionCount = stream.read();
             for(int i = 0; i < optionCount; i++) {
@@ -143,7 +144,10 @@ public class SaveManager {
 
                 int keybindCode = stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();
                 boolean keybindIsKey = stream.read() == 1;
-                boolean keybindTOR = version < 3 && stream.read() == 1;
+                boolean keybindTOR = false;
+
+                if(version >= 3)
+                    keybindTOR = stream.read() == 1;
 
                 module.keybind = keybindIsKey ?
                         Keybind.key(keybindCode, keybindTOR) :

@@ -69,7 +69,7 @@ public class ModuleManager {
 
         modules.add(new AntiBlind());
         modules.add(new DamagePerSecond());
-        modules.add(new Freecam());
+//        modules.add(new Freecam());
         modules.add(new Fullbright());
         modules.add(new ItemInfo());
         modules.add(new ModuleList());
