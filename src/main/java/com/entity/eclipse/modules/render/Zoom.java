@@ -11,7 +11,7 @@ public class Zoom extends Module {
     private double originalSens;
 
     public Zoom() {
-        super("Freecam", "ascend your soul", ModuleType.RENDER);
+        super("Zoom", "Zooms in your camera.", ModuleType.RENDER);
 
         this.config.create("ZoomedFov", new IntegerValue(25));
     }
@@ -28,7 +28,7 @@ public class Zoom extends Module {
 
         Eclipse.client.options.getFov().setValue(this.config.get("ZoomedFov"));
         Eclipse.client.options.getMouseSensitivity().setValue(
-                this.originalSens * ((double) this.config.get("ZoomedFov") / this.originalFOV)
+                this.originalSens * ((double) (int) this.config.get("ZoomedFov") / this.originalFOV)
         );
     }
 
