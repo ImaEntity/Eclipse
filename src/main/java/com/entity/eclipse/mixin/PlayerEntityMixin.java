@@ -21,7 +21,7 @@ public class PlayerEntityMixin {
         if(safeWalk == null) return;
 
         if(
-                (boolean) safeWalk.config.get("SafeWalkInLiquid") &&
+                !(boolean) safeWalk.config.get("SafeWalkInLiquid") &&
                 (Eclipse.client.player.isTouchingWater() || Eclipse.client.player.isInLava())
         ) return;
 

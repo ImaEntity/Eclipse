@@ -12,10 +12,6 @@ public class BrandSpoof extends Module {
         this.config.create("NewBrand", new StringValue("vanilla"));
     }
 
-    public String getBrand() {
-        return this.config.get("NewBrand");
-    }
-
     @Override
     public void tick() {
 

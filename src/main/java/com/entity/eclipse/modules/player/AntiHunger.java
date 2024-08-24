@@ -55,9 +55,9 @@ public class AntiHunger extends Module {
         if(Eclipse.client.player == null) return;
 
         if(Eclipse.client.player.isOnGround() && !this.lastOnGround)
-            ignorePacket = true;
+            this.ignorePacket = true;
 
-        lastOnGround = Eclipse.client.player.isOnGround();
+        this.lastOnGround = Eclipse.client.player.isOnGround();
     }
 
     @Override

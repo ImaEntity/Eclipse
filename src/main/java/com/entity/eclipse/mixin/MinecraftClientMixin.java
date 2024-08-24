@@ -1,8 +1,9 @@
 package com.entity.eclipse.mixin;
 
+import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.world.FastUse;
-import com.entity.eclipse.utils.SaveManager;
+import com.entity.eclipse.utils.ConfigManager;
 import net.minecraft.client.MinecraftClient;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,11 +20,14 @@ public class MinecraftClientMixin {
 
 	@Inject(at = @At("HEAD"), method = "stop")
 	private void onStop(CallbackInfo info) {
-		SaveManager.saveState();
+		ConfigManager.saveState();
 	}
 
 	@Redirect(method = "handleInputEvents", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/MinecraftClient;itemUseCooldown:I"))
 	public int resetItemUseCooldown(MinecraftClient client) {
-		return ModuleManager.getByClass(FastUse.class).isEnabled() ? 0 : this.itemUseCooldown;
+		Module fastUse =  ModuleManager.getByClass(FastUse.class);
+		if(fastUse == null) return this.itemUseCooldown;
+
+		return fastUse.isEnabled() ? 0 : this.itemUseCooldown;
 	}
 }

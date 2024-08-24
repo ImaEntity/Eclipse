@@ -21,7 +21,8 @@ import java.util.zip.Inflater;
 //     2. Faster
 //     3. Smaller
 //     4. Doesn't have to parse object trees
-public class SaveManager {
+public class ConfigManager {
+    private static final int VERSION = 4;
     private static final File configFile = new File(Eclipse.client.runDirectory.getAbsolutePath() + "/." + Eclipse.MOD_ID + "/config");
 
     private static byte[] configToBytes(Configuration config) {
@@ -48,7 +49,7 @@ public class SaveManager {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         // Version
-        stream.write(3);
+        stream.write(VERSION);
 
         stream.writeBytes(configToBytes(Eclipse.config));
 
@@ -67,6 +68,8 @@ public class SaveManager {
 
             stream.write(module.keybind.isKey() ? 1 : 0);
             stream.write(module.keybind.togglesOnRelease() ? 1 : 0);
+
+            stream.write(module.shouldShowToasts() ? 1 : 0);
 
             stream.writeBytes(configToBytes(module.config));
         }
@@ -117,7 +120,7 @@ public class SaveManager {
             ByteArrayInputStream stream = new ByteArrayInputStream(uncompressedBytes);
 
             int version = stream.read();
-            Eclipse.log("Save version: " + version);
+            Eclipse.log("Config version: " + version);
 
             int optionCount = stream.read();
             for(int i = 0; i < optionCount; i++) {
@@ -136,22 +139,26 @@ public class SaveManager {
                 String name = new String(stream.readNBytes(nameLength));
 
                 Module module = ModuleManager.getByName(name);
-
                 if(module == null) {
-                    Eclipse.log("Failed to find module: " + name);
+                    Eclipse.log("Failed to load module: " + name);
                     continue;
                 }
 
                 int keybindCode = stream.read() << 24 | stream.read() << 16 | stream.read() << 8 | stream.read();
                 boolean keybindIsKey = stream.read() == 1;
                 boolean keybindTOR = false;
-
                 if(version >= 3)
                     keybindTOR = stream.read() == 1;
 
                 module.keybind = keybindIsKey ?
                         Keybind.key(keybindCode, keybindTOR) :
                         Keybind.mouse(keybindCode, keybindTOR);
+
+                boolean showToasts = true;
+                if(version >= 4)
+                    showToasts = stream.read() == 1;
+
+                module.shouldShowToasts(showToasts);
 
                 int moduleOptionCount = stream.read();
                 for(int j = 0; j < moduleOptionCount; j++) {
@@ -160,6 +167,11 @@ public class SaveManager {
 
                     short valueLength = (short) (stream.read() << 8 | stream.read());
                     String value = new String(stream.readNBytes(valueLength));
+
+                    if(module.config.getRaw(key) == null) {
+                        Eclipse.log(module + " has no property " + key);
+                        continue;
+                    }
 
                     module.config.create(
                             key,
@@ -172,7 +184,12 @@ public class SaveManager {
             for(int i = 0; i < activeCount; i++) {
                 short nameLength = (short) (stream.read() << 8 | stream.read());
                 String name = new String(stream.readNBytes(nameLength));
+
                 Module module = ModuleManager.getByName(name);
+                if(module == null) {
+                    Eclipse.log("Failed to enable module: " + name);
+                    continue;
+                }
 
                 ModuleManager.queueEnable(module);
             }

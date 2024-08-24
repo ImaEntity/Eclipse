@@ -3,6 +3,7 @@ package com.entity.eclipse.modules;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.combat.*;
 import com.entity.eclipse.modules.misc.BrandSpoof;
+import com.entity.eclipse.modules.misc.Gambling;
 import com.entity.eclipse.modules.misc.Test;
 import com.entity.eclipse.modules.movement.*;
 import com.entity.eclipse.modules.network.AntiPacketKick;
@@ -81,6 +82,7 @@ public class ModuleManager {
 
         modules.add(new AirPlace());
         modules.add(new AutoFarm());
+        modules.add(new AutoFish());
         modules.add(new BridgeBuilder());
         modules.add(new FastUse());
         modules.add(new LawnMower());
@@ -94,6 +96,7 @@ public class ModuleManager {
         // Misc
 
         modules.add(new BrandSpoof());
+        modules.add(new Gambling());
         modules.add(new Test());
     }
 
@@ -164,44 +167,56 @@ public class ModuleManager {
     }
 
     public static void queueEnable(Module module) {
+        if(module == null) return;
         toBeEnabled.add(module);
     }
     public static void queueDisable(Module module) {
+        if(module == null) return;
         toBeDisabled.add(module);
     }
 
     public static void enable(Module module) {
+        if(module == null) return;
         if(module.isEnabled()) return;
 
         activeModules.add(module);
-        Eclipse.notifyUser("Enabled " + module);
+
+        if(module.shouldShowToasts())
+            Eclipse.notifyUser("Enabled " + module);
 
         module.enabled = true;
         module.onEnable();
     }
 
     public static void disable(Module module) {
+        if(module == null) return;
         if(!module.isEnabled()) return;
 
         activeModules.remove(module);
-        Eclipse.notifyUser("Disabled " + module);
+
+        if(module.shouldShowToasts())
+            Eclipse.notifyUser("Disabled " + module);
 
         module.enabled = false;
         module.onDisable();
     }
 
     public static void toggle(Module module) {
+        if(module == null) return;
         if(!module.isEnabled()) enable(module);
         else disable(module);
     }
 
     public static void tempEnable(Module module) {
+        if(module == null) return;
         module.enabled = true;
     }
     public static void tempDisable(Module module) {
+        if(module == null) return;
         module.enabled = false;
     }
     public static void revertTemp(Module module) {
+        if(module == null) return;
         module.enabled = activeModules.contains(module);
     }
 }

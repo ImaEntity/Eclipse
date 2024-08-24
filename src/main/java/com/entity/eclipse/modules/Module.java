@@ -9,6 +9,7 @@ public abstract class Module {
     private final String description;
     private final ModuleType type;
     protected boolean enabled = false;
+    protected boolean showToasts = true;
 
     public Keybind keybind;
     public Configuration config;
@@ -33,6 +34,13 @@ public abstract class Module {
     }
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public boolean shouldShowToasts() {
+        return this.showToasts;
+    }
+    public void shouldShowToasts(boolean showToasts) {
+        this.showToasts = showToasts;
     }
 
     public abstract void tick();

@@ -365,6 +365,25 @@ public class ModuleSettingsGUI extends Screen {
                     Keybind.mouse(this.module.keybind.getCode(), !this.module.keybind.togglesOnRelease());
         }
 
+        y += this.textRenderer.fontHeight + this.padding;
+
+        String toastString = "Show messages on toggle";
+        String toastText = this.module.keybind.toString();
+        int toastStringWidth = this.textRenderer.getWidth(toastString);
+        int toastTextWidth = this.textRenderer.getWidth(toastText);
+
+        if(
+                ((mouseX >= left + this.padding &&
+                mouseX <= left + this.padding + toastStringWidth) ||
+                (mouseX >= right - this.padding - toastTextWidth &&
+                mouseX <= right - this.padding)) &&
+                mouseY >= y &&
+                mouseY <= y + this.textRenderer.fontHeight &&
+                button == GLFW.GLFW_MOUSE_BUTTON_LEFT
+        ) {
+            this.module.shouldShowToasts(!this.module.shouldShowToasts());
+        }
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
@@ -609,6 +628,28 @@ public class ModuleSettingsGUI extends Screen {
                 (int) (right - this.padding - torTextWidth),
                 (int) y,
                 this.module.keybind.togglesOnRelease() ? 0x55FF55 : 0xFF5555
+        );
+
+        y += this.textRenderer.fontHeight;
+        y += this.padding;
+
+        String toastText = "§l" + (this.module.shouldShowToasts() ? "✔" : "❌") + "§r";
+        int toastTextWidth = this.textRenderer.getWidth(toastText);
+
+        context.drawTextWithShadow(
+                this.textRenderer,
+                "Show messages on toggle",
+                (int) (left + this.padding),
+                (int) y,
+                0xAAAAAA
+        );
+
+        context.drawTextWithShadow(
+                this.textRenderer,
+                toastText,
+                (int) (right - this.padding - toastTextWidth),
+                (int) y,
+                this.module.shouldShowToasts() ? 0x55FF55 : 0xFF5555
         );
 
         y += this.textRenderer.fontHeight;

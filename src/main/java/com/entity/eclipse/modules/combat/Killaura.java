@@ -66,6 +66,7 @@ public class Killaura extends Module {
         if(Eclipse.client.player == null) return;
         if(Eclipse.client.world == null) return;
         if(Eclipse.client.interactionManager == null) return;
+        if(Eclipse.client.getNetworkHandler() == null) return;
 
         this.delays.replaceAll((k, v) -> v + 1);
 

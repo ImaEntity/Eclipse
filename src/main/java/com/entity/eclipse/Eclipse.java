@@ -1,8 +1,8 @@
 package com.entity.eclipse;
 
 import com.entity.eclipse.gui.ClickGUI;
+import com.entity.eclipse.utils.ConfigManager;
 import com.entity.eclipse.utils.Configuration;
-import com.entity.eclipse.utils.SaveManager;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.tick.TickEvents;
 import com.entity.eclipse.utils.types.StringValue;
@@ -51,11 +51,11 @@ public class Eclipse implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		Runtime.getRuntime().addShutdownHook(new Thread(SaveManager::saveState));
+		Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
 
 		// Value must exist for SaveManager to change it
 		config.create("chatPrefix", new StringValue("."));
-		SaveManager.loadState();
+		ConfigManager.loadState();
 
 		Events.Tick.register(TickEvents.START, event -> {
 			if(openGUIKey.wasPressed())

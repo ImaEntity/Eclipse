@@ -27,11 +27,11 @@ public class AutoTotem extends Module {
         ItemStack offStack = Eclipse.client.player.getOffHandStack();
         ItemStack destination = isMainHand ? mainStack : offStack;
 
-        if(destination.getItem() == Items.TOTEM_OF_UNDYING) return;
+        if(destination.isOf(Items.TOTEM_OF_UNDYING)) return;
 
         int sourceIndex = Slots.findFirst(
                 Slots.ALL,
-                stack -> slotIdx -> stack.getItem() == Items.TOTEM_OF_UNDYING
+                stack -> slotIdx -> stack.isOf(Items.TOTEM_OF_UNDYING)
         );
 
         int sourceSlot = Slots.indexToID(sourceIndex);

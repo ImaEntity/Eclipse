@@ -21,6 +21,7 @@ public class CommandManager {
         commands.add(new Binds());
         commands.add(new Modules());
         commands.add(new Help());
+        commands.add(new Prefix());
 
         commands.add(new Test());
     }

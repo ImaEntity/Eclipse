@@ -9,7 +9,7 @@ import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.DoubleValue;
-import net.minecraft.item.MaceItem;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
@@ -27,7 +27,7 @@ public class MacePlus extends Module {
             if(!(event.getPacket() instanceof PlayerInteractEntityC2SPacket)) return;
             if(!this.isEnabled()) return;
 
-            if(!(Eclipse.client.player.getMainHandStack().getItem() instanceof MaceItem)) return;
+            if(!Eclipse.client.player.getMainHandStack().isOf(Items.MACE)) return;
 
             Module noFall = ModuleManager.getByClass(NoFall.class);
             if(noFall == null) return; // If this ever gets run, something is very broken
