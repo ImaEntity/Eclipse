@@ -3,6 +3,7 @@ package com.entity.eclipse.modules.world;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
+import com.entity.eclipse.utils.HitResultBuilders;
 import com.entity.eclipse.utils.Slots;
 import com.entity.eclipse.utils.Ticker;
 import com.entity.eclipse.utils.events.render.RenderEvent;
@@ -11,10 +12,10 @@ import com.entity.eclipse.utils.types.ItemValue;
 import com.entity.eclipse.utils.types.ListValue;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -37,6 +38,7 @@ public class BridgeBuilder extends Module {
         this.config.create("AllowedBlocks", new ListValue(
                 ItemValue.class,
                 "dirt",
+                "cobbled_deepslate",
                 "cobblestone",
                 "netherrack",
                 "end_stone",
@@ -69,12 +71,7 @@ public class BridgeBuilder extends Module {
             Eclipse.client.interactionManager.interactBlock(
                     Eclipse.client.player,
                     hand,
-                    new BlockHitResult(
-                            Vec3d.of(pos),
-                            direction,
-                            pos,
-                            true
-                    )
+                    HitResultBuilders.createBlock(pos, direction)
             );
 
             if(next != null)
@@ -181,12 +178,13 @@ public class BridgeBuilder extends Module {
                     .getBlock();
 
             boolean isAir = block instanceof AirBlock;
+            boolean isLiquid = block == Blocks.WATER || block == Blocks.LAVA;
             boolean isSolid = block.getDefaultState().isSolidBlock(null, targetPos);
 
-            if(!isAir && isSolid)
+            if(!isAir && !isLiquid && isSolid)
                 continue;
 
-            if(!isSolid && !isAir) {
+            if(!isSolid && !isAir && !isLiquid) {
                 queueBreakThen(targetPos, facing, () -> queuePlace(hand, refPos, facing));
                 continue;
             }

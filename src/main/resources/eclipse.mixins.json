@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"AbstractBlockStateMixin",
+		"BakedQuadMixin",
 		"BlockCollisionSpliteratorMixin",
 		"BlockMixin",
 		"BlockModelRendererMixin",
@@ -16,7 +17,7 @@
 		"IEntityVelocityUpdateS2CPacketMixin",
 		"ILivingEntityMixin",
 		"InGameHudMixin",
-		"IPlayerMoveC2SPacket",
+		"IPlayerMoveC2SPacketMixin",
 		"ItemStackMixin",
 		"LivingEntityMixin",
 		"MinecraftClientMixin",

@@ -71,7 +71,6 @@ public class PlayerUtils {
 
         if(System.currentTimeMillis() - attackedLastSet > lastSetTimeout) return null;
 
-
         if(lastAttacked.distanceTo(Eclipse.client.player) > 16) {
             lastAttacked = null;
             return null;

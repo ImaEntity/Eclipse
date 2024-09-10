@@ -1,7 +1,7 @@
 package com.entity.eclipse.modules.player;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.mixin.IPlayerMoveC2SPacket;
+import com.entity.eclipse.mixin.IPlayerMoveC2SPacketMixin;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
@@ -44,7 +44,7 @@ public class AntiHunger extends Module {
                         Eclipse.client.player.fallDistance <= 0 &&
                         !Eclipse.client.interactionManager.isBreakingBlock()
                 ) {
-                    ((IPlayerMoveC2SPacket) packet).setOnGround(false);
+                    ((IPlayerMoveC2SPacketMixin) packet).setOnGround(false);
                 }
             }
         });

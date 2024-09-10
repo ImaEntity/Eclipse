@@ -47,6 +47,7 @@ public class Jesus extends Module {
             if(Eclipse.client.getNetworkHandler() == null) return;
 
             if(!(event.getPacket() instanceof PlayerMoveC2SPacket packet)) return;
+
             if(Eclipse.client.player.isTouchingWater() && !this.waterIsSolid()) return;
             if(Eclipse.client.player.isInLava() && !this.lavaIsSolid()) return;
 
@@ -93,9 +94,8 @@ public class Jesus extends Module {
         double sinkFallHeight = this.config.get("LavaSinkFallHeight");
 
         if(sinkOnSneak && Eclipse.client.options.sneakKey.isPressed()) return false;
-        if(sinkOnFall && Eclipse.client.player.fallDistance >= sinkFallHeight) return false;
 
-        return true;
+        return !sinkOnFall || !(Eclipse.client.player.fallDistance >= sinkFallHeight);
     }
 
     public boolean waterIsSolid() {
@@ -114,9 +114,8 @@ public class Jesus extends Module {
 
         if(sinkIfBurning && Eclipse.client.player.isOnFire()) return false;
         if(sinkOnSneak && Eclipse.client.options.sneakKey.isPressed()) return false;
-        if(sinkOnFall && Eclipse.client.player.fallDistance >= sinkFallHeight) return false;
 
-        return true;
+        return !sinkOnFall || !(Eclipse.client.player.fallDistance >= sinkFallHeight);
     }
 
     private boolean isOverLiquid() {
@@ -140,9 +139,11 @@ public class Jesus extends Module {
         .collect(Collectors.toCollection(ArrayList::new));
 
         for(BlockState state : belowPlayer) {
+            boolean waterlogged = state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED);
+
             if(
-                    (state.getBlock() == Blocks.WATER || state.getFluidState().getFluid() == Fluids.WATER) ||
-                    (state.getBlock() == Blocks.LAVA || state.getFluidState().getFluid() == Fluids.LAVA)
+                    (state.isOf(Blocks.WATER) || state.getFluidState().isOf(Fluids.WATER) || waterlogged) ||
+                    (state.isOf(Blocks.LAVA) || state.getFluidState().isOf(Fluids.LAVA))
             ) foundLiquid = true;
             else if(!state.isAir())
                 foundSolid = true;

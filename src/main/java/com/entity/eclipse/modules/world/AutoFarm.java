@@ -3,6 +3,7 @@ package com.entity.eclipse.modules.world;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
+import com.entity.eclipse.utils.HitResultBuilders;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.types.DoubleValue;
 import net.minecraft.block.AirBlock;
@@ -10,7 +11,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -53,12 +53,7 @@ public class AutoFarm extends Module {
                         Eclipse.client.interactionManager.interactBlock(
                                 Eclipse.client.player,
                                 Hand.OFF_HAND,
-                                new BlockHitResult(
-                                        pos.toCenterPos(),
-                                        Direction.UP,
-                                        pos,
-                                        true
-                                )
+                                HitResultBuilders.createBlock(pos, Direction.UP)
                         );
 
                         return;
@@ -75,12 +70,7 @@ public class AutoFarm extends Module {
                     Eclipse.client.interactionManager.interactBlock(
                             Eclipse.client.player,
                             Hand.OFF_HAND,
-                            new BlockHitResult(
-                                    pos.toCenterPos(),
-                                    Direction.UP,
-                                    pos,
-                                    true
-                            )
+                            HitResultBuilders.createBlock(pos, Direction.UP)
                     );
                 }
             }

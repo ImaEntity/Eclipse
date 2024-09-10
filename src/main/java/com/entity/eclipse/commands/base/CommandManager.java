@@ -9,21 +9,21 @@ public class CommandManager {
 
     static {
         commands.add(new Bind());
-        commands.add(new Unbind());
-        commands.add(new Toggle());
-        commands.add(new Enable());
+        commands.add(new Binds());
+        commands.add(new Config());
         commands.add(new Disable());
         commands.add(new Dupe());
-        commands.add(new Config());
-        commands.add(new Panic());
-        commands.add(new VClip());
+        commands.add(new Enable());
         commands.add(new HClip());
-        commands.add(new Binds());
-        commands.add(new Modules());
         commands.add(new Help());
+        commands.add(new Modules());
+        commands.add(new Panic());
         commands.add(new Prefix());
-
+        commands.add(new Reload());
         commands.add(new Test());
+        commands.add(new Toggle());
+        commands.add(new Unbind());
+        commands.add(new VClip());
     }
 
     public static ArrayList<Command> getCommands() {

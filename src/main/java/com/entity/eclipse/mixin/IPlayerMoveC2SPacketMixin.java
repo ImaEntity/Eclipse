@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(PlayerMoveC2SPacket.class)
-public interface IPlayerMoveC2SPacket {
+public interface IPlayerMoveC2SPacketMixin {
     @Mutable
     @Accessor("x")
     void setX(double x);

@@ -19,7 +19,7 @@ public class Events {
         private static final HashMap<PacketEvents, ArrayList<Handler>> handlers = new HashMap<>();
 
         public static void register(PacketEvents event, Handler handler) {
-            if(!handlers.containsKey(event)) handlers.put(event, new ArrayList<Handler>());
+            if(!handlers.containsKey(event)) handlers.put(event, new ArrayList<>());
             handlers.get(event).add(handler);
         }
 

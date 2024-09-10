@@ -8,6 +8,8 @@ public abstract class Module {
     private final String name;
     private final String description;
     private final ModuleType type;
+
+    protected boolean isExternal = false;
     protected boolean enabled = false;
     protected boolean showToasts = true;
 
@@ -24,18 +26,25 @@ public abstract class Module {
     }
 
     public String getName() {
+        if(this.isExternal())
+            return 'λ' + this.name;
+
         return this.name;
     }
+
     public String getDescription() {
         return this.description;
     }
     public ModuleType getType() {
         return this.type;
     }
+
+    public boolean isExternal() {
+        return this.isExternal;
+    }
     public boolean isEnabled() {
         return this.enabled;
     }
-
     public boolean shouldShowToasts() {
         return this.showToasts;
     }
@@ -51,7 +60,7 @@ public abstract class Module {
 
     @Override
     public String toString() {
-        return "§6" + this.name + "§r";
+        return "§6" + this.getName() + "§r";
     }
 
 }

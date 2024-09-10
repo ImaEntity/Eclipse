@@ -100,7 +100,7 @@ public class ClickGUI extends Screen {
 
             context.drawCenteredTextWithShadow(
                     this.textRenderer,
-                    this.types[i].name(),
+                    this.types[i].getName(),
                     (int) (this.padding + x + width / 2),
                     (int) (this.padding * 2),
                     0xFFAA00

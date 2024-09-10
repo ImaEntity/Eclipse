@@ -1,7 +1,7 @@
 package com.entity.eclipse.modules.movement;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.mixin.IPlayerMoveC2SPacket;
+import com.entity.eclipse.mixin.IPlayerMoveC2SPacketMixin;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
@@ -25,14 +25,17 @@ public class NoFall extends Module {
             // Exploit potential?
             if(!(event.getPacket() instanceof PlayerMoveC2SPacket)) return;
 
-            if(ModuleManager.getByClass(Flight.class).isEnabled()) {
-                ((IPlayerMoveC2SPacket) event.getPacket()).setOnGround(true);
+            Module flight = ModuleManager.getByClass(Flight.class);
+            if(flight == null) return; // How do you even get here?
+
+            if(flight.isEnabled()) {
+                ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
                 return;
             }
 
             if(Eclipse.client.player.isFallFlying()) return;
 
-            ((IPlayerMoveC2SPacket) event.getPacket()).setOnGround(true);
+            ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
         });
     }
 

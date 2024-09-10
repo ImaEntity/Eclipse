@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class ModuleManager {
     private static final ArrayList<Module> activeModules = new ArrayList<>();
     private static final ArrayList<Module> modules = new ArrayList<>();
+    private static final ArrayList<Module> externalModules = new ArrayList<>();
     private static final ArrayList<Module> toBeEnabled = new ArrayList<>();
     private static final ArrayList<Module> toBeDisabled = new ArrayList<>();
 
@@ -56,6 +57,7 @@ public class ModuleManager {
         modules.add(new NoFall());
         modules.add(new NoJumpCooldown());
         modules.add(new SafeWalk());
+        modules.add(new Slippy());
         modules.add(new Speed());
         modules.add(new Sprint());
         modules.add(new Velocity());
@@ -74,6 +76,7 @@ public class ModuleManager {
         modules.add(new Fullbright());
         modules.add(new ItemInfo());
         modules.add(new ModuleList());
+        modules.add(new NegativeGraphics());
         modules.add(new UpsideDown());
         modules.add(new Xray());
         modules.add(new Zoom());
@@ -84,8 +87,10 @@ public class ModuleManager {
         modules.add(new AutoFarm());
         modules.add(new AutoFish());
         modules.add(new BridgeBuilder());
+        modules.add(new Extinguisher());
         modules.add(new FastUse());
         modules.add(new LawnMower());
+        modules.add(new Scaffold());
 
         // Network
 
@@ -218,5 +223,33 @@ public class ModuleManager {
     public static void revertTemp(Module module) {
         if(module == null) return;
         module.enabled = activeModules.contains(module);
+    }
+
+    public static void appendExternal(Module module) {
+        Module old = getByName(module.getName());
+        if(old != null)
+            removeExternal(old);
+
+        externalModules.add(module);
+        modules.add(module);
+    }
+
+    public static boolean removeExternal(Module module) {
+        return removeExternal(module, true);
+    }
+    private static boolean removeExternal(Module module, boolean removeFromExternals) {
+        disable(module);
+
+        if(removeFromExternals)
+            externalModules.remove(module);
+
+        return modules.remove(module);
+    }
+
+    public static void removeAllExternals() {
+        for(Module module : externalModules)
+            removeExternal(module, false);
+
+        externalModules.clear();
     }
 }

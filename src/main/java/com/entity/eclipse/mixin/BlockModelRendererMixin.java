@@ -4,13 +4,11 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.render.Xray;
 import com.entity.eclipse.utils.types.BlockValue;
-import com.entity.eclipse.utils.types.StringValue;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
@@ -32,6 +30,8 @@ public class BlockModelRendererMixin {
             int overlay, CallbackInfo info
     ) {
         Module xray = ModuleManager.getByClass(Xray.class);
+        if(xray == null) return;
+
         if(!xray.isEnabled()) return;
 
         boolean foundBlock = false;
