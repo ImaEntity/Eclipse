@@ -1,78 +1,71 @@
 package com.entity.eclipse.utils.scripting;
 
 import com.entity.eclipse.Eclipse;
-import com.entity.eclipse.modules.Module;
-import com.entity.eclipse.modules.ModuleManager;
-import com.entity.eclipse.utils.scripting.events.*;
-import com.entity.eclipse.utils.scripting.module.ModuleTypeWrapper;
-import com.entity.eclipse.utils.scripting.module.ModuleWrapper;
-import com.entity.eclipse.utils.types.*;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.HostAccess;
-import org.graalvm.polyglot.Value;
+import com.entity.eclipse.utils.events.Events;
+import com.entity.eclipse.utils.events.block.BlockEvents;
+import com.entity.eclipse.utils.events.lore.LoreEvents;
+import com.entity.eclipse.utils.events.packet.PacketEvents;
+import com.entity.eclipse.utils.events.render.RenderEvents;
+import com.entity.eclipse.utils.events.tick.TickEvents;
+import com.entity.eclipse.utils.scripting.wrappers.ConfigWrapper;
+import com.entity.eclipse.utils.scripting.wrappers.EclipseWrapper;
+import com.entity.eclipse.utils.scripting.wrappers.ModuleManagerWrapper;
+import com.entity.eclipse.utils.scripting.wrappers.ModuleTypeWrapper;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
+import java.io.Reader;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ScriptingManager {
-    public static Context createEngine(String langID) {
-        return Context.newBuilder(langID)
-                .allowHostAccess(HostAccess.ALL)
-                .allowHostClassLookup(s -> true)
-                .build();
+    public static Context createEngine() {
+        return Context.enter();
     }
 
-    public static void loadBindings(Context engine, String langID) {
-        Value bindings = engine.getBindings(langID);
+    public static Scriptable createScope(Context engine) {
+        Scriptable scope = engine.initStandardObjects();
 
-        bindings.putMember("Eclipse", new EclipseWrapper());
-        bindings.putMember("ModuleType", new ModuleTypeWrapper());
+        ScriptableObject.putProperty(scope, "Eclipse", Context.javaToJS(new EclipseWrapper(), scope));
 
-        bindings.putMember("Events", new EventsWrapper());
-        bindings.putMember("PacketEvents", new PacketEventsWrapper());
-        bindings.putMember("TickEvents", new TickEventsWrapper());
-        bindings.putMember("RenderEvents", new RenderEventsWrapper());
-        bindings.putMember("LoreEvents", new LoreEventsWrapper());
-        bindings.putMember("BlockEvents", new BlockEventsWrapper());
+        ScriptableObject.putProperty(scope, "ModuleType", Context.javaToJS(new ModuleTypeWrapper(), scope));
+        ScriptableObject.putProperty(scope, "ModuleManager", Context.javaToJS(new ModuleManagerWrapper(), scope));
 
-        bindings.putMember("BlockValue", BlockValue.class);
-        bindings.putMember("BooleanValue", BooleanValue.class);
-        bindings.putMember("ByteValue", ByteValue.class);
-        bindings.putMember("CharacterValue", CharacterValue.class);
-        bindings.putMember("DoubleValue", DoubleValue.class);
-        bindings.putMember("EntityTypeValue", EntityTypeValue.class);
-        bindings.putMember("FloatValue", FloatValue.class);
-        bindings.putMember("IntegerValue", IntegerValue.class);
-        bindings.putMember("ItemValue", ItemValue.class);
-        bindings.putMember("ListValue", ListValue.class);
-        bindings.putMember("LongValue", LongValue.class);
-        bindings.putMember("ShortValue", ShortValue.class);
-        bindings.putMember("StringValue", StringValue.class);
+        ScriptableObject.putProperty(scope, "Events", Context.javaToJS(Events.class, scope));
+        ScriptableObject.putProperty(scope, "PacketEvents", Context.javaToJS(PacketEvents.class, scope));
+        ScriptableObject.putProperty(scope, "TickEvents", Context.javaToJS(TickEvents.class, scope));
+        ScriptableObject.putProperty(scope, "RenderEvents", Context.javaToJS(RenderEvents.class, scope));
+        ScriptableObject.putProperty(scope, "LoreEvents", Context.javaToJS(LoreEvents.class, scope));
+        ScriptableObject.putProperty(scope, "BlockEvents", Context.javaToJS(BlockEvents.class, scope));
+
+        ScriptableObject.putProperty(scope, "Config", Context.javaToJS(new ConfigWrapper(), scope));
+
+        return scope;
     }
 
-    public static void loadScripts(Context engine, String landID) {
+    public static void loadScripts(Context engine, Scriptable scope) {
         Path dir = Paths.get(Eclipse.client.runDirectory.getAbsolutePath() + "/." + Eclipse.MOD_ID + "/scripts");
         if(!Files.exists(dir)) {
-            try { Files.createDirectory(dir); } catch(Exception e) { e.printStackTrace(); }
+            try { Files.createDirectories(dir); } catch(Exception e) { e.printStackTrace(); }
             return;
         }
 
         try {
             DirectoryStream<Path> stream = Files.newDirectoryStream(dir);
             for(Path path : stream) {
-                String script = Files.readString(path);
-                Value output = engine.eval(landID, script);
+                Reader script = Files.newBufferedReader(path);
 
-                if(output == null) {
-                    Eclipse.log(String.format("Script `%s` didn't return anything!", path.getFileName()));
-                    continue;
-                }
+                engine.evaluateReader(
+                        scope,
+                        script,
+                        path.getFileName().toString(),
+                        1,
+                        null
+                );
 
-                Module module = new ModuleWrapper(output);
-
-                ModuleManager.appendExternal(module);
                 Eclipse.log(String.format("Loaded script `%s`", path.getFileName()));
             }
         } catch(Exception e) {

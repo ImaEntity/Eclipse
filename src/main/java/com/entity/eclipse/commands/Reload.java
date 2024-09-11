@@ -13,6 +13,6 @@ public class Reload extends Command {
     @Override
     public void onExecute(String[] args) {
         ModuleManager.removeAllExternals();
-        ScriptingManager.loadScripts(Eclipse.jsEngine, "js");
+        ScriptingManager.loadScripts(Eclipse.jsEngine, Eclipse.engineScope);
     }
 }

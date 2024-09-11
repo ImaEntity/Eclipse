@@ -5,9 +5,9 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.utils.ConfigManager;
 import com.entity.eclipse.utils.Configuration;
-import com.entity.eclipse.utils.scripting.ScriptingManager;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.tick.TickEvents;
+import com.entity.eclipse.utils.scripting.ScriptingManager;
 import com.entity.eclipse.utils.types.StringValue;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -15,8 +15,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
-import org.graalvm.polyglot.Context;
 import org.lwjgl.glfw.GLFW;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,10 +35,12 @@ public class Eclipse implements ModInitializer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static MinecraftClient client = MinecraftClient.getInstance();
-	public static Configuration config = new Configuration();
+	public static final MinecraftClient client = MinecraftClient.getInstance();
+	public static final Configuration config = new Configuration();
 
-	public static final Context jsEngine = ScriptingManager.createEngine("js");
+	public static final Context jsEngine = ScriptingManager.createEngine();
+	public static final Scriptable engineScope = ScriptingManager.createScope(jsEngine);
+
 	public static final KeyBinding openGUIKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 			"key.eclipse.open_gui",
 			GLFW.GLFW_KEY_RIGHT_SHIFT,
@@ -72,13 +75,11 @@ public class Eclipse implements ModInitializer {
 				if(module.isEnabled()) ModuleManager.disable(module);
 		}));
 
-		ScriptingManager.loadBindings(jsEngine, "js");
-
 		// Value must exist for SaveManager to change it
 		config.create("chatPrefix", new StringValue("."));
 		ConfigManager.loadState();
 
-		ScriptingManager.loadScripts(jsEngine, "js");
+		ScriptingManager.loadScripts(jsEngine, engineScope);
 
 		Events.Tick.register(TickEvents.START, event -> {
 			if(openGUIKey.wasPressed())

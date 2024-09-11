@@ -14,11 +14,12 @@ import com.entity.eclipse.modules.player.AutoEat;
 import com.entity.eclipse.modules.player.AutoTool;
 import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.*;
-import com.entity.eclipse.utils.events.*;
+import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.render.RenderEvent;
 import com.entity.eclipse.utils.events.render.RenderEvents;
 import com.entity.eclipse.utils.events.tick.TickEvent;
 import com.entity.eclipse.utils.events.tick.TickEvents;
+import com.entity.eclipse.utils.scripting.wrappers.ModuleWrapper;
 
 import java.util.ArrayList;
 
@@ -251,5 +252,12 @@ public class ModuleManager {
             removeExternal(module, false);
 
         externalModules.clear();
+    }
+
+    public static Module create(String name, String description, ModuleType type) {
+        Module module =  new ModuleWrapper(name, description, type);
+        appendExternal(module);
+
+        return module;
     }
 }

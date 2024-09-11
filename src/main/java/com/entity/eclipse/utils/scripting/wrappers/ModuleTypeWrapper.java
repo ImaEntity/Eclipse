@@ -1,4 +1,4 @@
-package com.entity.eclipse.utils.scripting.module;
+package com.entity.eclipse.utils.scripting.wrappers;
 
 import com.entity.eclipse.modules.ModuleType;
 

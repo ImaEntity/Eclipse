@@ -28,8 +28,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Scripting Engine
-	implementation "org.graalvm.js:js:22.0.0"
-	implementation "org.graalvm.js:js-scriptengine:22.0.0"
+	implementation "org.mozilla:rhino:1.7.13"
+//	implementation "org.graalvm.js:js:22.0.0"
+//	implementation "org.graalvm.js:js-scriptengine:22.0.0"
 }
 
 processResources {
