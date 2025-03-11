@@ -8,9 +8,7 @@ import com.entity.eclipse.utils.types.BlockValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,7 +18,7 @@ import java.util.ArrayList;
 public class BlockMixin {
     @SuppressWarnings("unchecked")
     @ModifyReturnValue(method = "shouldDrawSide", at = @At("RETURN"))
-    private static boolean shouldDrawSide(boolean original, BlockState state, BlockView view, BlockPos pos, Direction facing, BlockPos blockPos) {
+    private static boolean shouldDrawSide(boolean original, BlockState state, BlockState other, Direction side) {
         Module xray = ModuleManager.getByClass(Xray.class);
         if(xray == null) return original;
 

@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.entity.eclipse.mixin.sodium",
+	"compatibilityLevel": "JAVA_21",
+	"plugin": "com.entity.eclipse.MixinPlugin",
+	"mixins": [
+		"SodiumBlockOcclusionCacheMixin",
+		"SodiumBlockRendererMixin",
+		"SodiumFluidRendererImplMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

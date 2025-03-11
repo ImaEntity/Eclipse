@@ -2,21 +2,21 @@ package com.entity.eclipse.modules;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.combat.*;
-import com.entity.eclipse.modules.misc.BrandSpoof;
-import com.entity.eclipse.modules.misc.Gambling;
-import com.entity.eclipse.modules.misc.Test;
+import com.entity.eclipse.modules.exploit.OffhandCrash;
+import com.entity.eclipse.modules.misc.*;
 import com.entity.eclipse.modules.movement.*;
-import com.entity.eclipse.modules.network.AntiPacketKick;
-import com.entity.eclipse.modules.network.Blink;
-import com.entity.eclipse.modules.network.PacketLoss;
+import com.entity.eclipse.modules.misc.AntiPacketKick;
+import com.entity.eclipse.modules.movement.Blink;
+import com.entity.eclipse.modules.misc.PacketLoss;
+import com.entity.eclipse.modules.exploit.ProjectileDupe;
 import com.entity.eclipse.modules.player.AntiHunger;
 import com.entity.eclipse.modules.player.AutoEat;
 import com.entity.eclipse.modules.player.AutoTool;
 import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.*;
 import com.entity.eclipse.utils.events.Events;
-import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.events.render.RenderEvents;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.events.tick.TickEvent;
 import com.entity.eclipse.utils.events.tick.TickEvents;
 import com.entity.eclipse.utils.scripting.wrappers.ModuleWrapper;
@@ -32,8 +32,7 @@ public class ModuleManager {
 
     static {
         Events.Tick.register(TickEvents.START, ModuleManager::tick);
-        Events.Render.register(RenderEvents.D2, ModuleManager::renderScreen);
-        Events.Render.register(RenderEvents.D3, ModuleManager::renderWorld);
+        Events.Render2D.register(ModuleManager::renderScreen);
 
         // Combat
 
@@ -52,6 +51,7 @@ public class ModuleManager {
 
         modules.add(new AirJump());
         modules.add(new AutoSneak());
+        modules.add(new Blink());
         modules.add(new Flight());
         modules.add(new Jesus());
         modules.add(new LongJump());
@@ -73,8 +73,9 @@ public class ModuleManager {
 
         modules.add(new AntiBlind());
         modules.add(new DamagePerSecond());
-//        modules.add(new Freecam());
+        modules.add(new Freecam());
         modules.add(new Fullbright());
+        modules.add(new Hud());
         modules.add(new ItemInfo());
         modules.add(new ModuleList());
         modules.add(new NegativeGraphics());
@@ -93,16 +94,20 @@ public class ModuleManager {
         modules.add(new LawnMower());
         modules.add(new Scaffold());
 
-        // Network
+        // Exploit
 
-        modules.add(new AntiPacketKick());
-        modules.add(new Blink());
-        modules.add(new PacketLoss());
+        modules.add(new OffhandCrash());
+        modules.add(new ProjectileDupe());
 
         // Misc
 
+        modules.add(new AntiPacketKick());
+        modules.add(new AntiVanish());
         modules.add(new BrandSpoof());
         modules.add(new Gambling());
+        modules.add(new GamemodeNotifier());
+        modules.add(new PacketLoss());
+        modules.add(new ResourceSpoof());
         modules.add(new Test());
     }
 
@@ -137,14 +142,14 @@ public class ModuleManager {
         }
     }
 
-    public static void renderWorld(RenderEvent event) {
+    public static void renderWorld(Render3DEvent event) {
         for(Module module : activeModules) {
             if(!module.isEnabled()) continue;
             module.renderWorld(event);
         }
     }
 
-    public static void renderScreen(RenderEvent event) {
+    public static void renderScreen(Render2DEvent event) {
         for(Module module : activeModules) {
             if(!module.isEnabled()) continue;
             module.renderScreen(event);

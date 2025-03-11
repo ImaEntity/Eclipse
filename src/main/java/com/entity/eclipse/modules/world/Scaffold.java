@@ -4,7 +4,8 @@ import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.Slots;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.ItemValue;
 import com.entity.eclipse.utils.types.ListValue;
@@ -116,12 +117,12 @@ public class Scaffold extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

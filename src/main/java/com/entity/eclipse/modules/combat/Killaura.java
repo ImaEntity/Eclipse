@@ -3,7 +3,8 @@ package com.entity.eclipse.modules.combat;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
@@ -19,8 +20,10 @@ public class Killaura extends Module {
         super("Killaura", "Attacks everything around you.", ModuleType.COMBAT);
 
         this.config.create("Range", new FloatValue(4f));
-        this.config.create("HitDelay", new IntegerValue(0));
         this.config.create("AutoDelay", new BooleanValue(true));
+        this.config.create("HitDelay", new IntegerValue(0))
+                .visibleIf(() -> !(boolean) this.config.get("AutoDelay"));
+
         this.config.create("Entities", new ListValue(
                 EntityTypeValue.class,
                 "player",
@@ -104,7 +107,6 @@ public class Killaura extends Module {
                 this.config.get("HitDelay");
 
         int delay = this.delays.getOrDefault(closestEntity, defaultDelay);
-
         if(delay < defaultDelay) return;
 
         // TODO: Look at the entity before attacking
@@ -126,12 +128,12 @@ public class Killaura extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

@@ -12,7 +12,7 @@ public class CommandManager {
         commands.add(new Binds());
         commands.add(new Config());
         commands.add(new Disable());
-        commands.add(new Dupe());
+        commands.add(new Drop());
         commands.add(new Enable());
         commands.add(new HClip());
         commands.add(new Help());

@@ -3,7 +3,7 @@ package com.entity.eclipse.utils.events.packet;
 import net.minecraft.network.packet.Packet;
 
 public class PacketEvent {
-    private final Packet<?> packet;
+    private Packet<?> packet;
     private boolean cancelled = false;
 
     public PacketEvent(Packet<?> packet) {
@@ -15,6 +15,10 @@ public class PacketEvent {
     }
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public void setPacket(Packet<?> packet) {
+        this.packet = packet;
     }
     public Packet<?> getPacket() {
         return this.packet;

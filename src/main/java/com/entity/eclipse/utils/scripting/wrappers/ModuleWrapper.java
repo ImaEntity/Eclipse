@@ -3,7 +3,8 @@ package com.entity.eclipse.utils.scripting.wrappers;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 
@@ -66,7 +67,7 @@ public class ModuleWrapper extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
         if(!this.events.containsKey("render3D"))
             return;
 
@@ -79,7 +80,7 @@ public class ModuleWrapper extends Module {
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
         if(!this.events.containsKey("render2D"))
             return;
 

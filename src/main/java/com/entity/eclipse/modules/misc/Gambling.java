@@ -3,7 +3,8 @@ package com.entity.eclipse.modules.misc;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Gambling extends Module {
@@ -14,6 +15,7 @@ public class Gambling extends Module {
     @Override
     public void tick() {
         if(Eclipse.client.getNetworkHandler() == null) return;
+        if(Eclipse.client.player == null) return;
 
         if(Math.random() > 0.0001)
             return;
@@ -22,7 +24,8 @@ public class Gambling extends Module {
                 Double.NaN,
                 Double.NaN,
                 Double.NaN,
-                false
+                false,
+                Eclipse.client.player.horizontalCollision
         ));
     }
 
@@ -37,12 +40,12 @@ public class Gambling extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

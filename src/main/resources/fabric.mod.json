@@ -16,10 +16,11 @@
 		]
 	},
 	"mixins": [
+		"sodium.mixins.json",
 		"eclipse.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.15.11",
+		"fabricloader": ">=0.16.9",
 		"minecraft": "~1.21",
 		"java": ">=17",
 		"fabric-api": "*"

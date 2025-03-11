@@ -5,7 +5,8 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
@@ -18,8 +19,8 @@ public class Criticals extends Module {
             if(Eclipse.client.player == null) return;
             if(Eclipse.client.getNetworkHandler() == null) return;
 
-            if(!(event.getPacket() instanceof PlayerInteractEntityC2SPacket)) return;
             if(!this.isEnabled()) return;
+            if(!(event.getPacket() instanceof PlayerInteractEntityC2SPacket)) return;
 
             if(
                     !Eclipse.client.player.isOnGround() ||
@@ -34,21 +35,24 @@ public class Criticals extends Module {
                     pos.x,
                     pos.y + 0.11,
                     pos.z,
-                    false
+                    false,
+                    Eclipse.client.player.horizontalCollision
             ));
 
             Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                     pos.x,
                     pos.y + 0.110001,
                     pos.z,
-                    false
+                    false,
+                    Eclipse.client.player.horizontalCollision
             ));
 
             Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                     pos.x,
                     pos.y + 0.000001,
                     pos.z,
-                    false
+                    false,
+                    Eclipse.client.player.horizontalCollision
             ));
         });
     }
@@ -69,12 +73,12 @@ public class Criticals extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

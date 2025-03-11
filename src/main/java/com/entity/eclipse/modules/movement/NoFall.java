@@ -7,7 +7,8 @@ import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class NoFall extends Module {
@@ -20,6 +21,7 @@ public class NoFall extends Module {
             if(Eclipse.client.player == null) return;
             if(Eclipse.client.getNetworkHandler() == null) return;
 
+            // TODO: Do some dumb shit with this, haven't checked back in like 7 updates
             // Forgetting this if statement leads to the SERVER sending invalid packets.
             // And also several network protocol errors upon rejoining.
             // Exploit potential?
@@ -33,8 +35,7 @@ public class NoFall extends Module {
                 return;
             }
 
-            if(Eclipse.client.player.isFallFlying()) return;
-
+            if(Eclipse.client.player.isGliding()) return;
             ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
         });
     }
@@ -55,12 +56,12 @@ public class NoFall extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

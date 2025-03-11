@@ -22,4 +22,8 @@ public interface IPlayerMoveC2SPacketMixin {
     @Mutable
     @Accessor("onGround")
     void setOnGround(boolean onGround);
+
+    @Mutable
+    @Accessor("changePosition")
+    void setChangePosition(boolean changePosition);
 }

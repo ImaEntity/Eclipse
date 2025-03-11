@@ -2,7 +2,8 @@ package com.entity.eclipse.modules.world;
 
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 
 public class FastUse extends Module {
     public FastUse() {
@@ -25,12 +26,12 @@ public class FastUse extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

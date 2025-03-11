@@ -8,6 +8,6 @@ public class ModuleTypeWrapper {
     public final ModuleType PLAYER = ModuleType.PLAYER;
     public final ModuleType RENDER = ModuleType.RENDER;
     public final ModuleType WORLD = ModuleType.WORLD;
-    public final ModuleType NETWORK = ModuleType.NETWORK;
+    public final ModuleType NETWORK = ModuleType.EXPLOIT;
     public final ModuleType MISC = ModuleType.MISC;
 }

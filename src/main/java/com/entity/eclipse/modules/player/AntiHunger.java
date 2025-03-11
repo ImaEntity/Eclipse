@@ -6,7 +6,8 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -71,12 +72,12 @@ public class AntiHunger extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

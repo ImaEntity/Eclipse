@@ -5,14 +5,35 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.combat.Reach;
 import com.entity.eclipse.modules.movement.SafeWalk;
+import com.entity.eclipse.modules.render.Freecam;
 import net.minecraft.entity.player.PlayerEntity;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
+    @Redirect(
+            method = "tick",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/entity/player/PlayerEntity;noClip:Z",
+                    opcode = Opcodes.PUTFIELD
+            )
+    )
+    private void overwriteNoClip(PlayerEntity entity, boolean original) {
+        entity.noClip = original;
+
+        Module freecam = ModuleManager.getByClass(Freecam.class);
+        if(freecam == null) return; // fuck off intellij
+
+        if(!freecam.isEnabled()) return;
+        entity.noClip = true;
+    }
+
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     protected void shouldSafeWalk(CallbackInfoReturnable<Boolean> info) {
         if(Eclipse.client.player == null) return;

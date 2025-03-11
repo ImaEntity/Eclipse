@@ -1,8 +1,11 @@
 package com.entity.eclipse.modules;
 
+import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.utils.Configuration;
 import com.entity.eclipse.utils.Keybind;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
+import net.minecraft.text.Text;
 
 public abstract class Module {
     private final String name;
@@ -55,8 +58,28 @@ public abstract class Module {
     public abstract void tick();
     public abstract void onEnable();
     public abstract void onDisable();
-    public abstract void renderWorld(RenderEvent event);
-    public abstract void renderScreen(RenderEvent event);
+    public abstract void renderWorld(Render3DEvent event);
+    public abstract void renderScreen(Render2DEvent event);
+
+    public void notifyUserRaw(Text message) {
+        this.notifyUserRaw(message, false);
+    }
+    public void notifyUserRaw(Text message, boolean actionBar) {
+        Eclipse.notifyUserRaw(
+                Text.literal(!actionBar ? "§8[§7" + this.getName() + "§8]§r " : "").append(message),
+                actionBar
+        );
+    }
+
+    public void notifyUser(String message) {
+        this.notifyUser(message, false);
+    }
+    public void notifyUser(String message, boolean actionBar) {
+        Eclipse.notifyUserRaw(
+                Text.literal(!actionBar ? "§8[§7" + this.getName() + "§8]§r " : "").append(message),
+                actionBar
+        );
+    }
 
     @Override
     public String toString() {

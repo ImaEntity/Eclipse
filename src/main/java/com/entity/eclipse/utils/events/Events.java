@@ -2,12 +2,13 @@ package com.entity.eclipse.utils.events;
 
 import com.entity.eclipse.utils.events.block.BlockEvent;
 import com.entity.eclipse.utils.events.block.BlockEvents;
+import com.entity.eclipse.utils.events.chat.ChatEvent;
+import com.entity.eclipse.utils.events.chat.ChatEvents;
 import com.entity.eclipse.utils.events.lore.LoreEvent;
 import com.entity.eclipse.utils.events.lore.LoreEvents;
 import com.entity.eclipse.utils.events.packet.PacketEvent;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
-import com.entity.eclipse.utils.events.render.RenderEvents;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
 import com.entity.eclipse.utils.events.tick.TickEvent;
 import com.entity.eclipse.utils.events.tick.TickEvents;
 
@@ -32,6 +33,7 @@ public class Events {
             return argument.isCancelled();
         }
 
+        @FunctionalInterface
         public interface Handler {
             void onFired(PacketEvent event);
         }
@@ -54,20 +56,21 @@ public class Events {
             return argument.isCancelled();
         }
 
+        @FunctionalInterface
         public interface Handler {
             void onFired(TickEvent event);
         }
     }
 
-    public static class Render {
-        private static final HashMap<RenderEvents, ArrayList<Handler>> handlers = new HashMap<>();
+    public static class Chat {
+        private static final HashMap<ChatEvents, ArrayList<Handler>> handlers = new HashMap<>();
 
-        public static void register(RenderEvents event, Handler handler) {
+        public static void register(ChatEvents event, Handler handler) {
             if(!handlers.containsKey(event)) handlers.put(event, new ArrayList<>());
             handlers.get(event).add(handler);
         }
 
-        public static boolean fireEvent(RenderEvents event, RenderEvent argument) {
+        public static boolean fireEvent(ChatEvents event, ChatEvent argument) {
             if(!handlers.containsKey(event)) return false;
 
             for(Handler handler : handlers.get(event))
@@ -76,8 +79,28 @@ public class Events {
             return argument.isCancelled();
         }
 
+        @FunctionalInterface
         public interface Handler {
-            void onFired(RenderEvent event);
+            void onFired(ChatEvent event);
+        }
+    }
+
+    public static class Render2D {
+        private static final ArrayList<Handler> handlers = new ArrayList<>();
+
+        public static void register(Handler handler) {
+            handlers.add(handler);
+        }
+        public static boolean fireEvent(Render2DEvent argument) {
+            for(Handler handler : handlers)
+                handler.onFired(argument);
+
+            return argument.isCancelled();
+        }
+
+        @FunctionalInterface
+        public interface Handler {
+            void onFired(Render2DEvent event);
         }
     }
 
@@ -98,6 +121,7 @@ public class Events {
             return argument.isCancelled();
         }
 
+        @FunctionalInterface
         public interface Handler {
             void onFired(LoreEvent event);
         }
@@ -120,6 +144,7 @@ public class Events {
             return argument.isCancelled();
         }
 
+        @FunctionalInterface
         public interface Handler {
             void onFired(BlockEvent event);
         }

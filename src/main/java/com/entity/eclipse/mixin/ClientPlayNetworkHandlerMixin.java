@@ -48,6 +48,9 @@ public class ClientPlayNetworkHandlerMixin {
 		if(latest.version().equalsIgnoreCase(Eclipse.VERSION))
 			return;
 
+		if(!latest.gameVersion().equalsIgnoreCase(Eclipse.MC_VERSION))
+			return;
+
 		if(!((boolean) Eclipse.config.get("ShouldNotifyUpdates")))
 			return;
 

@@ -3,7 +3,8 @@ package com.entity.eclipse.modules.movement;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.DoubleValue;
 import net.minecraft.util.math.Vec3d;
 
@@ -12,7 +13,7 @@ public class LongJump extends Module {
     private int ticks = 2;
 
     public LongJump() {
-        super("LongJump", "big jump", ModuleType.MOVEMENT);
+        super("LongJump", "leap", ModuleType.MOVEMENT);
 
         this.config.create("Multiplier", new DoubleValue(1.0));
     }
@@ -59,12 +60,12 @@ public class LongJump extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

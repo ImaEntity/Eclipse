@@ -78,7 +78,7 @@ public class ClickGUI extends Screen {
                 this.textRenderer,
                 String.format("Press (%s) to open client config.", Eclipse.openGUIKey.getBoundKeyLocalizedText().getString()),
                 (int) (this.width / 2.0),
-                (int) (this.height - this.padding - 50),
+                (int) (this.height - this.padding - 55),
                 0xFFAA00
         );
 
@@ -110,7 +110,7 @@ public class ClickGUI extends Screen {
 
             context.drawCenteredTextWithShadow(
                     this.textRenderer,
-                    this.types[i].getName(),
+                    this.types[i].toString(),
                     (int) (this.padding + x + width / 2),
                     (int) (this.padding * 2),
                     0xFFAA00

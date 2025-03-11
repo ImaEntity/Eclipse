@@ -5,7 +5,6 @@ import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.block.BlockEvents;
 import com.entity.eclipse.utils.events.lore.LoreEvents;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvents;
 import com.entity.eclipse.utils.events.tick.TickEvents;
 import com.entity.eclipse.utils.scripting.wrappers.ConfigWrapper;
 import com.entity.eclipse.utils.scripting.wrappers.EclipseWrapper;
@@ -37,7 +36,6 @@ public class ScriptingManager {
         ScriptableObject.putProperty(scope, "Events", Context.javaToJS(Events.class, scope));
         ScriptableObject.putProperty(scope, "PacketEvents", Context.javaToJS(PacketEvents.class, scope));
         ScriptableObject.putProperty(scope, "TickEvents", Context.javaToJS(TickEvents.class, scope));
-        ScriptableObject.putProperty(scope, "RenderEvents", Context.javaToJS(RenderEvents.class, scope));
         ScriptableObject.putProperty(scope, "LoreEvents", Context.javaToJS(LoreEvents.class, scope));
         ScriptableObject.putProperty(scope, "BlockEvents", Context.javaToJS(BlockEvents.class, scope));
 

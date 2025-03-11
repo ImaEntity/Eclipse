@@ -6,6 +6,7 @@ import com.entity.eclipse.utils.Keybind;
 import com.entity.eclipse.utils.Strings;
 import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.DynamicValue;
+import com.entity.eclipse.utils.types.EnumValue;
 import com.entity.eclipse.utils.types.ListValue;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 // Fuck my life again
+// Added enums
 public class ModuleSettingsGUI extends Screen {
     private final Module module;
     private final double padding = 3;
@@ -33,6 +35,8 @@ public class ModuleSettingsGUI extends Screen {
     private String valueSettingName = "";
     private int valueListIndex = -1;
     private double prevHeight = -1;
+    private boolean showingEnum = false;
+    private int enumListIndex = -1;
 
     public ModuleSettingsGUI(Module module) {
         super(Text.of("Module Settings"));
@@ -158,7 +162,7 @@ public class ModuleSettingsGUI extends Screen {
             }
 
             if(shifted) {
-                if(c > 'A' && c < 'Z') textToAppend = textToAppend.toUpperCase();
+                if(c >= 'A' && c <= 'Z') textToAppend = textToAppend.toUpperCase();
                 else if(c == '`') textToAppend = "~";
                 else if(c == '1') textToAppend = "!";
                 else if(c == '2') textToAppend = "@";
@@ -204,9 +208,14 @@ public class ModuleSettingsGUI extends Screen {
         Set<String> settings = this.module.config.getAll();
         double y = this.padding * 3 + (this.textRenderer.fontHeight + this.padding) * 2;
 
+        boolean keepEnumMenuOpen = false;
+
         for(int i = 0; i < settings.size(); i++) {
             String settingName = settings.toArray(new String[0])[i];
             DynamicValue<?> value = this.module.config.getRaw(settingName);
+
+            if(!this.module.config.isVisible(settingName))
+                continue;
 
             int settingNameWidth = this.textRenderer.getWidth(Strings.camelToReadable(settingName));
 
@@ -305,6 +314,34 @@ public class ModuleSettingsGUI extends Screen {
 
             int settingValueWidth = this.textRenderer.getWidth(value.toString());
 
+            if(this.showingEnum && this.enumListIndex == i) {
+                int maxWidth = 0;
+                EnumValue<?> _enum = (EnumValue<?>) value;
+
+                for(int j = 0; j < _enum.values.length; j++) {
+                    String enumValueName = _enum.values[j].toString();
+                    maxWidth = Math.max(maxWidth, this.textRenderer.getWidth(enumValueName));
+                }
+
+                for(int j = 0; j < _enum.values.length; j++) {
+                    String enumValueName = _enum.values[j].toString();
+                    int valueWidth = this.textRenderer.getWidth(enumValueName);
+
+                    if(
+                            mouseX >= right + this.padding &&
+                            mouseX <= right + this.padding + valueWidth &&
+                            mouseY >= y + j * (this.textRenderer.fontHeight + this.padding) &&
+                            mouseY <= y + j * (this.textRenderer.fontHeight + this.padding) + this.textRenderer.fontHeight &&
+                            button == GLFW.GLFW_MOUSE_BUTTON_LEFT
+                    ) {
+                        this.showingEnum = false;
+                        this.enumListIndex = -1;
+
+                        value.setValue(_enum.values[j]);
+                    }
+                }
+            }
+
             if(
                     ((mouseX >= left + this.padding &&
                     mouseX <= left + this.padding + settingNameWidth) ||
@@ -314,11 +351,16 @@ public class ModuleSettingsGUI extends Screen {
                     mouseY <= y + this.textRenderer.fontHeight &&
                     button == GLFW.GLFW_MOUSE_BUTTON_LEFT
             ) {
-                if(!(value instanceof BooleanValue bool)) {
+                if(value instanceof BooleanValue bool) {
+                    bool.setValue(!bool.getValue());
+                } else if(value instanceof EnumValue<?>) {
+                    this.enumListIndex = i;
+                    this.showingEnum = true;
+                    keepEnumMenuOpen = true;
+                } else {
                     this.valueSettingName = settingName;
                     this.listeningForValue = true;
-                } else
-                    bool.setValue(!bool.getValue());
+                }
             }
 
             y += this.textRenderer.fontHeight + this.padding;
@@ -382,6 +424,11 @@ public class ModuleSettingsGUI extends Screen {
                 button == GLFW.GLFW_MOUSE_BUTTON_LEFT
         ) {
             this.module.shouldShowToasts(!this.module.shouldShowToasts());
+        }
+
+        if(this.showingEnum && button == GLFW.GLFW_MOUSE_BUTTON_LEFT && !keepEnumMenuOpen) {
+            this.showingEnum = false;
+            this.enumListIndex = -1;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -453,6 +500,9 @@ public class ModuleSettingsGUI extends Screen {
         for(int i = 0; i < settings.size(); i++) {
             String settingName = settings.toArray(new String[0])[i];
             DynamicValue<?> value = this.module.config.getRaw(settingName);
+
+            if(!this.module.config.isVisible(settingName))
+                continue;
 
             context.drawTextWithShadow(
                     this.textRenderer,
@@ -567,6 +617,36 @@ public class ModuleSettingsGUI extends Screen {
                         (int) (y + this.textRenderer.fontHeight + this.padding),
                         0xFF555555
                 );
+            }
+
+            if(this.showingEnum && this.enumListIndex == i) {
+                int maxWidth = 0;
+                EnumValue<?> _enum = (EnumValue<?>) value;
+
+                for(int j = 0; j < _enum.values.length; j++) {
+                    String enumValueName = _enum.values[j].toString();
+                    maxWidth = Math.max(maxWidth, this.textRenderer.getWidth(enumValueName));
+                }
+
+                context.fill(
+                        right,
+                        (int) (y - this.padding),
+                        (int) (right + this.padding + maxWidth + this.padding),
+                        (int) (y + _enum.values.length * (this.textRenderer.fontHeight + this.padding)),
+                        0xEE000000
+                );
+
+                for(int j = 0; j < _enum.values.length; j++) {
+                    String enumValueName = _enum.values[j].toString();
+
+                    context.drawTextWithShadow(
+                            this.textRenderer,
+                            enumValueName,
+                            (int) (right + this.padding),
+                            (int) (y + j * (this.textRenderer.fontHeight + this.padding)),
+                            0xAAAAAA
+                    );
+                }
             }
 
             if(settingValue.equalsIgnoreCase("§7§r")) {

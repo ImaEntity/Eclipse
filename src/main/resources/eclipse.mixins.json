@@ -8,6 +8,7 @@
 		"BlockCollisionSpliteratorMixin",
 		"BlockMixin",
 		"BlockModelRendererMixin",
+		"ChatHudMixin",
 		"ClientBrandRetrieverMixin",
 		"ClientConnectionMixin",
 		"ClientPlayerEntityMixin",
@@ -22,6 +23,8 @@
 		"LivingEntityMixin",
 		"MinecraftClientMixin",
 		"PlayerEntityMixin",
+		"ScreenMixin",
+		"ServerResourcePackLoaderMixin",
 		"SimpleOptionMixin",
 		"WindowMixin",
 		"WorldRendererMixin"

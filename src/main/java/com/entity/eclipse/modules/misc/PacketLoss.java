@@ -1,17 +1,18 @@
-package com.entity.eclipse.modules.network;
+package com.entity.eclipse.modules.misc;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.network.packet.s2c.common.KeepAliveS2CPacket;
 import net.minecraft.network.packet.s2c.play.*;
 
 public class PacketLoss extends Module {
     public PacketLoss() {
-        super("PacketLoss", "Ignores incoming packets.", ModuleType.NETWORK);
+        super("PacketLoss", "Ignores incoming packets.", ModuleType.MISC);
 
         Events.Packet.register(PacketEvents.RECEIVE, event -> {
             if(Eclipse.client.player == null) return;
@@ -49,12 +50,12 @@ public class PacketLoss extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

@@ -4,7 +4,8 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 
 import java.util.HashMap;
 
@@ -12,7 +13,7 @@ public class Test extends Module {
     private HashMap<String, Object> data = new HashMap<>();
 
     public Test() {
-        super("Test", "idfk", ModuleType.MISC);
+        super("Test", "makes my life easier", ModuleType.MISC);
 
         Events.Packet.register(PacketEvents.SEND, event -> {
             if(!this.isEnabled()) return;
@@ -39,12 +40,12 @@ public class Test extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

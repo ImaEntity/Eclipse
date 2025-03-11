@@ -15,6 +15,9 @@ public class Slots {
         public boolean contains(int slot) {
             return slot >= this.start && slot <= this.end;
         }
+        public int size() {
+            return this.end - this.start + 1;
+        }
     }
 
     public static final int INVALID_SLOT = -1;
@@ -62,8 +65,8 @@ public class Slots {
         return bestSlot;
     }
 
-    public static int findFirst(Range range, Function<ItemStack, Function<Integer, Boolean>> filter) {
-        if(Eclipse.client.player == null) return INVALID_SLOT;
+    public static ArrayList<Integer> find(Range range, Function<ItemStack, Function<Integer, Boolean>> filter) {
+        if(Eclipse.client.player == null) return new ArrayList<>();
 
         ArrayList<Integer> slotIndices = new ArrayList<>();
 
@@ -74,14 +77,14 @@ public class Slots {
             slotIndices.add(i);
         }
 
-        ArrayList<Integer> reversedSlots = new ArrayList<>();
-        for(int i = slotIndices.size() - 1; i >= 0; i--)
-            reversedSlots.add(slotIndices.get(i));
+        return slotIndices;
+    }
 
-        if(reversedSlots.isEmpty())
-            return INVALID_SLOT;
+    public static int findFirst(Range range, Function<ItemStack, Function<Integer, Boolean>> filter) {
+        ArrayList<Integer> slotIndices = find(range, filter);
+        if(slotIndices.isEmpty()) return INVALID_SLOT;
 
-        return reversedSlots.getFirst();
+        return slotIndices.getLast();
     }
 
     public static void swap(int source, int destination) {
@@ -115,6 +118,19 @@ public class Slots {
                 source,
                 GLFW.GLFW_MOUSE_BUTTON_LEFT,
                 SlotActionType.PICKUP,
+                Eclipse.client.player
+        );
+    }
+
+    public static void drop(int slotID, boolean dropAll) {
+        if(Eclipse.client.player == null) return;
+        if(Eclipse.client.interactionManager == null) return;
+
+        Eclipse.client.interactionManager.clickSlot(
+                Eclipse.client.player.playerScreenHandler.syncId,
+                slotID,
+                dropAll ? 2 : 1,
+                SlotActionType.THROW,
                 Eclipse.client.player
         );
     }

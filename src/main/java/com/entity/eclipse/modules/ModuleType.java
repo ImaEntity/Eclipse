@@ -6,14 +6,16 @@ public enum ModuleType {
     PLAYER("Player"),
     RENDER("Render"),
     WORLD("World"),
-    NETWORK("Network"),
+    EXPLOIT("Exploit"),
     MISC("Miscellaneous");
 
     private final String name;
+
     ModuleType(String name) {
         this.name = name;
     }
-    public String getName() {
+    @Override
+    public String toString() {
         return this.name;
     }
 }

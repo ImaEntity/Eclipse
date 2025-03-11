@@ -19,7 +19,7 @@ public class VClip extends Command {
 
         if(Eclipse.client.player.hasVehicle()) {
             for(int i = 0; i < grounds - 1; i++)
-                Eclipse.client.getNetworkHandler().sendPacket(new VehicleMoveC2SPacket(Eclipse.client.player.getVehicle()));
+                Eclipse.client.getNetworkHandler().sendPacket(VehicleMoveC2SPacket.fromVehicle(Eclipse.client.player.getVehicle()));
 
             Eclipse.client.player.getVehicle().setPosition(
                     Eclipse.client.player.getVehicle().getX(),
@@ -27,18 +27,19 @@ public class VClip extends Command {
                     Eclipse.client.player.getVehicle().getZ()
             );
 
-            Eclipse.client.getNetworkHandler().sendPacket(new VehicleMoveC2SPacket(Eclipse.client.player.getVehicle()));
+            Eclipse.client.getNetworkHandler().sendPacket(VehicleMoveC2SPacket.fromVehicle(Eclipse.client.player.getVehicle()));
             return;
         }
 
         for(int i = 0; i < grounds - 1; i++)
-            Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true));
+            Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true, Eclipse.client.player.horizontalCollision));
 
         Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                 Eclipse.client.player.getX(),
                 Eclipse.client.player.getY() + height,
                 Eclipse.client.player.getZ(),
-                true
+                true,
+                Eclipse.client.player.horizontalCollision
         ));
 
         Eclipse.client.player.setPosition(

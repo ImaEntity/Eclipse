@@ -5,7 +5,8 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.lore.LoreEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -25,8 +26,8 @@ public class DamagePerSecond extends Module {
 
             Text attackSpeedText = null;
             Text attackDamageText = null;
-            double attackSpeed = Eclipse.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_SPEED);
-            double attackDamage = Eclipse.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) +
+            double attackSpeed = Eclipse.client.player.getAttributeBaseValue(EntityAttributes.ATTACK_SPEED);
+            double attackDamage = Eclipse.client.player.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) +
                     0f; // This is supposed to take enchantments into account.
 
             AttributeModifiersComponent component = event.getParent().getOrDefault(
@@ -95,12 +96,12 @@ public class DamagePerSecond extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

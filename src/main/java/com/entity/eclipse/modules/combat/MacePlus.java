@@ -7,7 +7,8 @@ import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.modules.movement.NoFall;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.DoubleValue;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
@@ -16,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class MacePlus extends Module {
     public MacePlus() {
-        super("MacePlus", "Makes maces do more damage.", ModuleType.COMBAT);
+        super("MacePlus", "turns your mace into a one shot wonder", ModuleType.COMBAT);
 
         this.config.create("DropDistance", new DoubleValue(3.0));
 
@@ -40,23 +41,25 @@ public class MacePlus extends Module {
             ) / 10);
 
             for(int i = 0; i < grounds - 1; i++)
-                Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(false));
+                Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(false, Eclipse.client.player.horizontalCollision));
 
             Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                     pos.getX(),
                     pos.getY() + (double) this.config.get("DropDistance"),
                     pos.getZ(),
-                    false
+                    false,
+                    Eclipse.client.player.horizontalCollision
             ));
 
             for(int i = 0; i < grounds - 1; i++)
-                Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(false));
+                Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(false, Eclipse.client.player.horizontalCollision));
 
             Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
                     pos.getX(),
                     pos.getY(),
                     pos.getZ(),
-                    false
+                    false,
+                    Eclipse.client.player.horizontalCollision
             ));
 
             ModuleManager.revertTemp(noFall);
@@ -79,12 +82,12 @@ public class MacePlus extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

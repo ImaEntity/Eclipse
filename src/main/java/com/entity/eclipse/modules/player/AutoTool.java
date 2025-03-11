@@ -6,21 +6,17 @@ import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.Slots;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.block.BlockEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-
-import java.util.Optional;
 
 public class AutoTool extends Module {
     private int prevSlot = Slots.INVALID_SLOT;
@@ -75,12 +71,9 @@ public class AutoTool extends Module {
         float mlt = stack.getMiningSpeedMultiplier(state);
         if(mlt <= 1f) return Float.NaN;
 
-        DynamicRegistryManager drm = Eclipse.client.world.getRegistryManager();
-        Registry<Enchantment> registry = drm.get(RegistryKeys.ENCHANTMENT);
-        Optional<RegistryEntry.Reference<Enchantment>> efficiency = registry.getEntry(Enchantments.EFFICIENCY);
-        int effLvl = efficiency
-                .map(entry -> EnchantmentHelper.getLevel(entry, stack))
-                .orElse(0);
+        int effLvl = 0;
+        for(Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : stack.getEnchantments().getEnchantmentEntries())
+            if(entry.getKey().matchesKey(Enchantments.EFFICIENCY)) effLvl = entry.getIntValue();
 
         if(effLvl > 0 && !stack.isEmpty())
             return mlt + effLvl * effLvl + 1;
@@ -95,7 +88,7 @@ public class AutoTool extends Module {
                 1f - (float) stack.getDamage() / stack.getMaxDamage() :
                 1f;
 
-        if(percent <= 0.05f && (boolean) this.config.get("PreventToolBreaking"))
+        if(stack.getMaxDamage() - stack.getDamage() <= 1 && (boolean) this.config.get("PreventToolBreaking"))
             return Float.NaN;
 
         if(Float.isNaN(speed))
@@ -177,12 +170,12 @@ public class AutoTool extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

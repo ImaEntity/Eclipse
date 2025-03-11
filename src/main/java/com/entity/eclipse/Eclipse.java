@@ -13,6 +13,7 @@ import com.entity.eclipse.utils.types.StringValue;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 public class Eclipse implements ModInitializer {
 	public static final String MOD_ID = "eclipse";
 	public static final String MOD_NAME = "Eclipse";
+	public static final String MC_VERSION = SharedConstants.getGameVersion().getName();
 	public static final String VERSION = "v" + FabricLoader
 			.getInstance()
 			.getModContainer(MOD_ID)
@@ -64,7 +66,7 @@ public class Eclipse implements ModInitializer {
 			return;
 
 		client.player.sendMessage(
-				Text.of((!actionBar ? "[§6§lEcl§0§lipse§r] " : "") + message),
+				Text.literal(!actionBar ? "[§6§lEcl§0§lipse§r] " : "").append(message),
 				actionBar
 		);
 	}

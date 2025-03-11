@@ -1,11 +1,12 @@
-package com.entity.eclipse.modules.network;
+package com.entity.eclipse.modules.movement;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.common.KeepAliveC2SPacket;
 
@@ -15,7 +16,7 @@ public class Blink extends Module {
     private final ArrayList<Packet<?>> queue = new ArrayList<>();
 
     public Blink() {
-        super("Blink", "Delays outgoing packets.", ModuleType.NETWORK);
+        super("Blink", "Delays outgoing packets.", ModuleType.MOVEMENT);
 
         Events.Packet.register(PacketEvents.SEND, event -> {
             if(Eclipse.client.player == null) return;
@@ -53,12 +54,12 @@ public class Blink extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

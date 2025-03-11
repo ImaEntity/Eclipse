@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URL;
 
 public class UpdateManager {
-    public record Update(String version, String jarFileName) {}
+    public record Update(String version, String gameVersion, String jarFileName) {}
 
     public static Update getLatest() {
         try {
@@ -19,7 +19,7 @@ public class UpdateManager {
 
             int status = con.getResponseCode();
             if (status < 200 || status > 299)
-                return new Update(Eclipse.VERSION, null);
+                return new Update(Eclipse.VERSION, Eclipse.MC_VERSION, null);
 
             InputStream stream = con.getInputStream();
             String properties = new String(stream.readAllBytes());
@@ -37,6 +37,7 @@ public class UpdateManager {
 
             return new Update(
                     "v" + mod_version.split("\\+")[0],
+                    mod_version.split("\\+")[1].split("-")[0],
                     String.format(
                             "%s-%s.jar",
                             archives_base_name,
@@ -45,7 +46,7 @@ public class UpdateManager {
             );
         } catch (Exception e) {
             e.printStackTrace();
-            return new Update(Eclipse.VERSION, null);
+            return new Update(Eclipse.VERSION, Eclipse.MC_VERSION, null);
         }
     }
 }

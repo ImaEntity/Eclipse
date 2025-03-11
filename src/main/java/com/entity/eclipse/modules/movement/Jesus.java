@@ -5,7 +5,8 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.DoubleValue;
 import com.google.common.collect.Streams;
@@ -15,6 +16,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -77,9 +79,15 @@ public class Jesus extends Module {
             Packet<?> newPacket;
 
             if(packet instanceof PlayerMoveC2SPacket.PositionAndOnGround)
-                newPacket = new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, true);
-            else
-                newPacket = new PlayerMoveC2SPacket.Full(x, y, z, packet.getYaw(0), packet.getPitch(0), true);
+                newPacket = new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, true, Eclipse.client.player.horizontalCollision);
+            else {
+                newPacket = new PlayerMoveC2SPacket.Full(
+                        x, y, z,
+                        packet.getYaw(0), packet.getPitch(0),
+                        true,
+                        Eclipse.client.player.horizontalCollision
+                );
+            }
 
             Eclipse.client.getNetworkHandler().getConnection().send(newPacket);
         });
@@ -103,7 +111,7 @@ public class Jesus extends Module {
 
         if(Eclipse.client.player.hasVehicle()) {
             EntityType<?> vehicle = Eclipse.client.player.getVehicle().getType();
-            if(vehicle == EntityType.BOAT || vehicle == EntityType.CHEST_BOAT) return false;
+            if(vehicle.isIn(EntityTypeTags.BOAT)) return false;
         }
 
         boolean sinkIfBurning = this.config.get("WaterSinkIfBurning");
@@ -204,12 +212,12 @@ public class Jesus extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }

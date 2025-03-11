@@ -3,9 +3,10 @@ package com.entity.eclipse.modules.render;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
-import com.entity.eclipse.utils.events.render.RenderEvent;
+import com.entity.eclipse.utils.events.render.Render2DEvent;
+import com.entity.eclipse.utils.events.render.Render3DEvent;
 import net.minecraft.client.option.GraphicsMode;
-import net.minecraft.client.option.ParticlesMode;
+import net.minecraft.particle.ParticlesMode;
 
 public class NegativeGraphics extends Module {
     private boolean originalAO;
@@ -64,12 +65,12 @@ public class NegativeGraphics extends Module {
     }
 
     @Override
-    public void renderWorld(RenderEvent event) {
+    public void renderWorld(Render3DEvent event) {
 
     }
 
     @Override
-    public void renderScreen(RenderEvent event) {
+    public void renderScreen(Render2DEvent event) {
 
     }
 }
