@@ -61,7 +61,7 @@ public class Jesus extends Module {
                     !this.isOverLiquid()
             ) return;
 
-            if(Eclipse.client.player.input.movementForward == 0 && Eclipse.client.player.input.movementSideways == 0) {
+            if(Eclipse.client.player.input.getMovementInput().y == 0 && Eclipse.client.player.input.getMovementInput().x == 0) {
                 event.setCancelled(true);
                 return;
             }

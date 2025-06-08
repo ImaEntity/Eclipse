@@ -72,7 +72,7 @@ public class AutoFarm extends Module {
                         if(!(potentialPlant.getBlock() instanceof AirBlock))
                              continue;
 
-                        int prevSlot = Eclipse.client.player.getInventory().selectedSlot;
+                        int prevSlot = Eclipse.client.player.getInventory().getSelectedSlot();
                         int endSlot = (boolean) this.config.get("AllowInventory") ?
                                 Slots.MAIN.end() :
                                 Slots.HOTBAR.end();
@@ -98,7 +98,7 @@ public class AutoFarm extends Module {
                                     Slots.indexToID(Slots.OFFHAND)
                             );
                         } else {
-                            Eclipse.client.player.getInventory().selectedSlot = slot;
+                            Eclipse.client.player.getInventory().setSelectedSlot(slot);
                         }
 
                         Eclipse.client.interactionManager.interactBlock(
@@ -107,7 +107,7 @@ public class AutoFarm extends Module {
                                 HitResultBuilders.createBlock(pos, Direction.UP)
                         );
 
-                        Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                        Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                         if(!Slots.HOTBAR.contains(slot)) {
                             Slots.swap(
                                     Slots.indexToID(slot),
@@ -135,7 +135,7 @@ public class AutoFarm extends Module {
                                 Slots.MAIN.end() :
                                 Slots.HOTBAR.end();
 
-                        int prevSlot = Eclipse.client.player.getInventory().selectedSlot;
+                        int prevSlot = Eclipse.client.player.getInventory().getSelectedSlot();
                         int slot = Slots.findFirst(
                                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
                                 (stack, slotIdx) -> stack.isIn(ItemTags.HOES)
@@ -147,7 +147,7 @@ public class AutoFarm extends Module {
                                     Slots.indexToID(prevSlot)
                             );
                         } else {
-                            Eclipse.client.player.getInventory().selectedSlot = slot;
+                            Eclipse.client.player.getInventory().setSelectedSlot(slot);
                         }
 
                         Eclipse.client.interactionManager.interactBlock(
@@ -156,7 +156,7 @@ public class AutoFarm extends Module {
                                 HitResultBuilders.createBlock(pos, Direction.UP)
                         );
 
-                        Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                        Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                         if(!Slots.HOTBAR.contains(slot)) {
                             Slots.swap(
                                     Slots.indexToID(slot),

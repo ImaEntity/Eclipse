@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.net.URI;
 import java.util.Arrays;
 
 @Mixin(ClientPlayNetworkHandler.class)
@@ -61,13 +62,12 @@ public class ClientPlayNetworkHandlerMixin {
 						.setStyle(Style.EMPTY
 								.withColor(Formatting.GOLD)
 								.withUnderline(true)
-								.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, String.format(
+								.withClickEvent(new ClickEvent.OpenUrl(URI.create(String.format(
 										"https://github.com/ImaEntity/Eclipse/releases/download/%s/%s",
 										latest.version(),
 										latest.jarFileName()
-								)))
-								.withHoverEvent(new HoverEvent(
-										HoverEvent.Action.SHOW_TEXT,
+								))))
+								.withHoverEvent(new HoverEvent.ShowText(
 										Text.of("Download " + latest.jarFileName() + "?")
 								))
 						)

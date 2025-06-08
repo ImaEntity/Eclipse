@@ -2,12 +2,15 @@ package com.entity.eclipse.utils;
 
 import net.minecraft.client.input.Input;
 import net.minecraft.util.PlayerInput;
+import net.minecraft.util.math.Vec2f;
 
 public class MutableInput extends Input {
     @Override
     public void tick() {
-        this.movementForward = this.playerInput.forward() == this.playerInput.backward() ? 0f : (this.playerInput.forward() ? 1f : -1f);
-        this.movementSideways = this.playerInput.left() == this.playerInput.right() ? 0f : (this.playerInput.left() ? 1f : -1f);
+        this.movementVector = new Vec2f(
+                this.playerInput.left() == this.playerInput.right() ? 0f : (this.playerInput.left() ? 1f : -1f),
+                this.playerInput.forward() == this.playerInput.backward() ? 0f : (this.playerInput.forward() ? 1f : -1f)
+        );
     }
 
     public void stop() {

@@ -120,7 +120,7 @@ public class CrystalAura extends Module {
         if(!Slots.HOTBAR.contains(blockSlot))
             Slots.swap(Slots.indexToID(blockSlot), Slots.getSelectedID());
         else
-            Eclipse.client.player.getInventory().selectedSlot = blockSlot;
+            Eclipse.client.player.getInventory().setSelectedSlot(blockSlot);
 
         for(EndCrystalEntity crystal : dangerousCrystals) {
             Vec3d pointer = crystal.getPos()

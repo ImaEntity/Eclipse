@@ -70,9 +70,10 @@ public class Scaffold extends Module {
             );
         }
 
+        float prevPitch = Eclipse.client.player.getPitch();
         Eclipse.client.player.setPitch(0);
         Direction facing = Direction.getFacing(Eclipse.client.player.getRotationVec(0));
-        Eclipse.client.player.setPitch(Eclipse.client.player.prevPitch);
+        Eclipse.client.player.setPitch(prevPitch);
 
         int minX = -Math.abs(facing.getOffsetX());
         int maxX =  Math.abs(facing.getOffsetX());

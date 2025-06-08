@@ -15,8 +15,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
 
 public class AutoTool extends Module {
     private int prevSlot = Slots.INVALID_SLOT;
@@ -48,7 +48,7 @@ public class AutoTool extends Module {
                         Slots.getSelectedID()
                 );
             } else {
-                Eclipse.client.player.getInventory().selectedSlot = bestSlot;
+                Eclipse.client.player.getInventory().setSelectedSlot(bestSlot);
             }
         });
 
@@ -60,7 +60,7 @@ public class AutoTool extends Module {
             if(!(boolean) this.config.get("SwitchBack")) return;
             if(this.prevSlot == Slots.INVALID_SLOT) return;
 
-            Eclipse.client.player.getInventory().selectedSlot = this.prevSlot;
+            Eclipse.client.player.getInventory().setSelectedSlot(this.prevSlot);
             this.prevSlot = Slots.INVALID_SLOT;
         });
     }
@@ -142,7 +142,7 @@ public class AutoTool extends Module {
 
                     if(
                             !(boolean) this.config.get("UseSwords") &&
-                            stack.getItem() instanceof SwordItem
+                            stack.isIn(ItemTags.SWORDS)
                     ) return (double) Float.NaN;
 
                     return (double) score;

@@ -45,7 +45,7 @@ public class ResourceSpoof extends Module {
                     Style.EMPTY
                             .withColor(Formatting.GOLD)
                             .withUnderline(true)
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Accept pack?")))
+                            .withHoverEvent(new HoverEvent.ShowText(Text.literal("Accept pack?")))
                             .withClickEvent(new RunnableClickEvent(() -> {
                                 URL url = null;
                                 try { url = new URI(packet.url()).toURL(); } catch(Exception ignored) {}

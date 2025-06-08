@@ -307,11 +307,11 @@ public class BridgeBuilder extends Module {
             return;
         }
 
-        int prevSlot = Eclipse.client.player.getInventory().selectedSlot;
+        int prevSlot = Eclipse.client.player.getInventory().getSelectedSlot();
         if(Slots.HOTBAR.contains(slot))
-            Eclipse.client.player.getInventory().selectedSlot = slot;
+            Eclipse.client.player.getInventory().setSelectedSlot(slot);
         else {
-            Eclipse.client.player.getInventory().selectedSlot = Slots.HOTBAR.end();
+            Eclipse.client.player.getInventory().setSelectedSlot(Slots.HOTBAR.end());
             Slots.swap(
                     Slots.indexToID(Slots.HOTBAR.end()),
                     Slots.indexToID(slot)
@@ -362,7 +362,7 @@ public class BridgeBuilder extends Module {
                     !isAir &&
                     !isLiquid
             ) {
-                Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                 if(this.breakBlock(targetPos, blocksBroken))
                     return;
 
@@ -377,7 +377,7 @@ public class BridgeBuilder extends Module {
             }
 
             if(placements >= (int) this.config.get("MaxPlacementsPerTick")) {
-                Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                 return;
             }
 
@@ -391,12 +391,12 @@ public class BridgeBuilder extends Module {
             placements++;
 
             if((boolean) this.config.get("EnableRotations")) {
-                Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                 return;
             }
         }
 
-        Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+        Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
         if(placements > 0) return;
 
         if((boolean) this.config.get("CreateCeiling")) {
@@ -413,11 +413,11 @@ public class BridgeBuilder extends Module {
                 return;
             }
 
-            prevSlot = Eclipse.client.player.getInventory().selectedSlot;
+            prevSlot = Eclipse.client.player.getInventory().getSelectedSlot();
             if(Slots.HOTBAR.contains(slot))
-                Eclipse.client.player.getInventory().selectedSlot = slot;
+                Eclipse.client.player.getInventory().setSelectedSlot(slot);
             else {
-                Eclipse.client.player.getInventory().selectedSlot = Slots.HOTBAR.end();
+                Eclipse.client.player.getInventory().setSelectedSlot(Slots.HOTBAR.end());
                 Slots.swap(
                         Slots.indexToID(slot),
                         Slots.indexToID(Slots.HOTBAR.end())
@@ -453,7 +453,7 @@ public class BridgeBuilder extends Module {
                 ) continue;
 
                 if((!isSolid || (boolean) this.config.get("ReplaceNonMatching") && !matches) && !isAir && !isLiquid) {
-                    Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                    Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                     if(this.breakBlock(targetPos, blocksBroken))
                         return;
 
@@ -468,7 +468,7 @@ public class BridgeBuilder extends Module {
                 }
 
                 if(placements >= (int) this.config.get("MaxPlacementsPerTick")) {
-                    Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                    Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                     return;
                 }
 
@@ -482,12 +482,12 @@ public class BridgeBuilder extends Module {
                 placements++;
 
                 if((boolean) this.config.get("EnableRotations")) {
-                    Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+                    Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
                     return;
                 }
             }
 
-            Eclipse.client.player.getInventory().selectedSlot = prevSlot;
+            Eclipse.client.player.getInventory().setSelectedSlot(prevSlot);
             if(placements > 0) return;
         }
 
@@ -499,12 +499,13 @@ public class BridgeBuilder extends Module {
     public void onEnable() {
         if(Eclipse.client.player == null) return;
 
+        float pitch = Eclipse.client.player.getPitch();
         Eclipse.client.player.setPitch(0f);
 
         this.forwardDir = Eclipse.client.player.getFacing();
         this.rightDir = this.forwardDir.rotateYClockwise();
 
-        Eclipse.client.player.setPitch(Eclipse.client.player.prevPitch);
+        Eclipse.client.player.setPitch(pitch);
 
         this.breakTimer = 0;
         this.prevYaw = Eclipse.client.player.getYaw();

@@ -21,12 +21,12 @@ public class Drop extends Command {
         }
 
         if(args.length == 0) {
-            Slots.drop(Slots.indexToID(Eclipse.client.player.getInventory().selectedSlot), true);
+            Slots.drop(Slots.indexToID(Eclipse.client.player.getInventory().getSelectedSlot()), true);
             return;
         }
 
         switch(args[0].toLowerCase()) {
-            case "hand" -> Slots.drop(Slots.indexToID(Eclipse.client.player.getInventory().selectedSlot), true);
+            case "hand" -> Slots.drop(Slots.indexToID(Eclipse.client.player.getInventory().getSelectedSlot()), true);
             case "offhand" -> Slots.drop(Slots.indexToID(Slots.OFFHAND), true);
             case "hotbar" -> {
                 for(int i = 0; i < Slots.HOTBAR.size(); i++)

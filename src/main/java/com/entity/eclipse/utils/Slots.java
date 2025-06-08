@@ -45,7 +45,7 @@ public class Slots {
 
     public static int getSelectedID() {
         if(Eclipse.client.player == null) return INVALID_SLOT;
-        return indexToID(Eclipse.client.player.getInventory().selectedSlot);
+        return indexToID(Eclipse.client.player.getInventory().getSelectedSlot());
     }
 
     public static int findBest(Range range, BiFunction<ItemStack, Integer, Double> criteria) {

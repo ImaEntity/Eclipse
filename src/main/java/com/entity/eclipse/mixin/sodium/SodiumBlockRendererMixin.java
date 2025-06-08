@@ -6,7 +6,7 @@ import com.entity.eclipse.modules.render.Xray;
 import com.entity.eclipse.utils.types.BlockValue;
 import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderer;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BlockStateModel;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public class SodiumBlockRendererMixin {
             ),
             cancellable = true
     )
-    private void onRenderModel(BakedModel model, BlockState state, BlockPos pos, BlockPos origin, CallbackInfo info) {
+    private void onRenderModel(BlockStateModel model, BlockState state, BlockPos pos, BlockPos origin, CallbackInfo info) {
         Module xray = ModuleManager.getByClass(Xray.class);
         if(xray == null) return;
 

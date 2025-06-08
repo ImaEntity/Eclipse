@@ -9,6 +9,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.net.URI;
+
 public class Update extends Command {
     public Update() {
         super("Update", "Checks for client updates.", "update");
@@ -30,13 +32,12 @@ public class Update extends Command {
                         .setStyle(Style.EMPTY
                                 .withColor(Formatting.GOLD)
                                 .withUnderline(true)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, String.format(
+                                .withClickEvent(new ClickEvent.OpenUrl(URI.create(String.format(
                                         "https://github.com/ImaEntity/Eclipse/releases/download/%s/%s",
                                         latest.version(),
                                         latest.jarFileName()
-                                )))
-                                .withHoverEvent(new HoverEvent(
-                                        HoverEvent.Action.SHOW_TEXT,
+                                ))))
+                                .withHoverEvent(new HoverEvent.ShowText(
                                         Text.of("Download " + latest.jarFileName() + "?")
                                 ))
                         )

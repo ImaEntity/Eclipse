@@ -90,7 +90,7 @@ public class AutoEat extends Module {
                     Slots.indexToID(this.slot)
             );
         } else
-            Eclipse.client.player.getInventory().selectedSlot = this.prevSlot;
+            Eclipse.client.player.getInventory().setSelectedSlot(this.prevSlot);
 
         this.slot = Slots.INVALID_SLOT;
         this.prevSlot = Slots.INVALID_SLOT;
@@ -108,7 +108,7 @@ public class AutoEat extends Module {
         if(this.slot == Slots.INVALID_SLOT) return;
 
         this.eating = true;
-        this.prevSlot = Eclipse.client.player.getInventory().selectedSlot;
+        this.prevSlot = Eclipse.client.player.getInventory().getSelectedSlot();
 
         Module killaura = ModuleManager.getByClass(Killaura.class);
         if(killaura != null)
@@ -120,7 +120,7 @@ public class AutoEat extends Module {
                     Slots.getSelectedID()
             );
         } else {
-            Eclipse.client.player.getInventory().selectedSlot = this.slot;
+            Eclipse.client.player.getInventory().setSelectedSlot(this.slot);
         }
 
         Eclipse.client.options.useKey.setPressed(true);
