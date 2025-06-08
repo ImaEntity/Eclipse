@@ -57,7 +57,7 @@ public class Scaffold extends Module {
 
             int slot = Slots.findFirst(
                     new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                    stack -> slotIdx ->
+                    (stack, slotIdx) ->
                             ((ListValue) this.config.getRaw("AllowedBlocks")).contains(stack.getItem())
             );
 

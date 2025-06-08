@@ -35,6 +35,11 @@ public abstract class BlockCollisionSpliteratorMixin {
         Jesus jesus = (Jesus) ModuleManager.getByClass(Jesus.class);
         if(!jesus.isEnabled()) return shape;
 
+        if(!shape.isEmpty()) {
+            if(shape.getBoundingBox().getLengthY() > 1)
+                return shape;
+        }
+
         if(state.getFluidState().isEmpty()) return shape;
 
         if(

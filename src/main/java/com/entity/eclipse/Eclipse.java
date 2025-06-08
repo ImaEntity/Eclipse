@@ -42,7 +42,7 @@ public class Eclipse implements ModInitializer {
 	public static final Configuration config = new Configuration();
 
 	public static final Context jsEngine = ScriptingManager.createEngine();
-	public static final Scriptable engineScope = ScriptingManager.createScope(jsEngine);
+	public static Scriptable engineScope = ScriptingManager.createScope(jsEngine);
 
 	public static final KeyBinding openGUIKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 			"key.eclipse.open_gui",

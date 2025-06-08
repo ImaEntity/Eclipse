@@ -12,6 +12,7 @@ import com.entity.eclipse.modules.exploit.ProjectileDupe;
 import com.entity.eclipse.modules.player.AntiHunger;
 import com.entity.eclipse.modules.player.AutoEat;
 import com.entity.eclipse.modules.player.AutoTool;
+import com.entity.eclipse.modules.player.NoEntityPush;
 import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.*;
 import com.entity.eclipse.utils.events.Events;
@@ -68,6 +69,7 @@ public class ModuleManager {
         modules.add(new AntiHunger());
         modules.add(new AutoEat());
         modules.add(new AutoTool());
+        modules.add(new NoEntityPush());
 
         // Render
 

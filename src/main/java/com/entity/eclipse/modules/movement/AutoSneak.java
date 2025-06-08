@@ -40,12 +40,12 @@ public class AutoSneak extends Module {
         boolean shouldSneak = false;
         Box bounding = Eclipse.client.player.getBoundingBox()
                 .offset(0, -1, 0)
-                .expand(0.5);
+                .expand(0.4);
 
         for(int z = -1; z <= 1; z++) {
             for(int x = -1; x <= 1; x++) {
-                double scaledX = x / 3.0 + 0.5;
-                double scaledZ = z / 3.0 + 0.5;
+                double scaledX = x / 3.0 + 0.4;
+                double scaledZ = z / 3.0 + 0.4;
 
                 BlockPos pos = Eclipse.client.player.getBlockPos().add(x, -1, z);
                 BlockState state = Eclipse.client.world.getBlockState(pos);

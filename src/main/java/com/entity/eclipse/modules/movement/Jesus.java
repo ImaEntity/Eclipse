@@ -20,7 +20,6 @@ import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 
 import java.util.ArrayList;
@@ -70,8 +69,6 @@ public class Jesus extends Module {
             if(this.packetTimer++ < 4) return;
             this.packetTimer = 0;
 
-            event.setCancelled(true);
-
             double x = packet.getX(0);
             double y = packet.getY(0) + 0.05;
             double z = packet.getZ(0);
@@ -83,13 +80,15 @@ public class Jesus extends Module {
             else {
                 newPacket = new PlayerMoveC2SPacket.Full(
                         x, y, z,
-                        packet.getYaw(0), packet.getPitch(0),
+                        packet.getYaw(Eclipse.client.player.getYaw()),
+                        packet.getPitch(Eclipse.client.player.getPitch()),
                         true,
                         Eclipse.client.player.horizontalCollision
                 );
             }
 
-            Eclipse.client.getNetworkHandler().getConnection().send(newPacket);
+            event.setCancelled(false);
+            event.setPacket(newPacket);
         });
     }
 
@@ -169,19 +168,18 @@ public class Jesus extends Module {
         if(Eclipse.client.player.isInSwimmingPose()) return;
         if(Eclipse.client.player.isInLava() && !this.lavaIsSolid()) return;
 
-        BlockState below = Eclipse.client.world.getBlockState(Eclipse.client.player.getBlockPos().down());
+        // not below dipshit
+        BlockState below = Eclipse.client.world.getBlockState(Eclipse.client.player.getBlockPos());
         if(below.getBlock() != Blocks.WATER && below.getBlock() != Blocks.LAVA) return;
 
         boolean waterlogged = false;
         try { waterlogged = below.get(Properties.WATERLOGGED); } catch(Exception ignored) {}
 
         if(Eclipse.client.player.isTouchingWater() || Eclipse.client.player.isInLava()) {
-            Vec3d vel = Eclipse.client.player.getVelocity();
-
-            Eclipse.client.player.setVelocity(
-                    vel.x,
+            Eclipse.client.player.addVelocity(
+                    0,
                     0.11,
-                    vel.z
+                    0
             );
 
             this.tickTimer = 0;
@@ -189,11 +187,10 @@ public class Jesus extends Module {
         }
 
         if(this.tickTimer == 0) {
-            Vec3d vel = Eclipse.client.player.getVelocity();
-            Eclipse.client.player.setVelocity(
-                    vel.x,
+            Eclipse.client.player.addVelocity(
+                    0,
                     0.3,
-                    vel.z
+                    0
             );
         } else if(this.tickTimer == 1 && (below.getBlock() == Blocks.WATER || below.getBlock() == Blocks.LAVA || waterlogged))
             Eclipse.client.player.getVelocity().multiply(1, 0, 1);

@@ -53,7 +53,7 @@ public class AutoEat extends Module {
         AtomicInteger bestNutrition = new AtomicInteger(-1);
         int slot = Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> slotIdx -> {
+                (stack, slotIdx) -> {
                     Item item = stack.getItem();
                     FoodComponent food = item.getComponents().get(DataComponentTypes.FOOD);
 

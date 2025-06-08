@@ -12,6 +12,9 @@ public class Reload extends Command {
 
     @Override
     public void onExecute(String[] args) {
+        if(args.length > 0 && args[0].equalsIgnoreCase("full"))
+            Eclipse.engineScope = ScriptingManager.createScope(Eclipse.jsEngine);
+
         ModuleManager.removeAllExternals();
         ScriptingManager.loadScripts(Eclipse.jsEngine, Eclipse.engineScope);
     }

@@ -109,7 +109,7 @@ public class AutoTool extends Module {
 
         return Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> slotIdx -> {
+                (stack, slotIdx) -> {
                     if(stack.isDamageable())
                         return Double.NaN;
 
@@ -136,7 +136,7 @@ public class AutoTool extends Module {
 
         int slot = Slots.findBest(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> slotIdx -> {
+                (stack, slotIdx) -> {
                     float score = calculateScore(stack, state);
                     if(Float.isNaN(score)) return (double) Float.NaN;
 

@@ -5,6 +5,7 @@ import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleManager;
 import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.modules.movement.NoFall;
+import com.entity.eclipse.modules.player.AntiHunger;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.render.Render2DEvent;
@@ -33,7 +34,11 @@ public class MacePlus extends Module {
             Module noFall = ModuleManager.getByClass(NoFall.class);
             if(noFall == null) return; // If this ever gets run, something is very broken
 
+            Module antiHunger = ModuleManager.getByClass(AntiHunger.class);
+            if(antiHunger == null) return;
+
             ModuleManager.tempDisable(noFall);
+            ModuleManager.tempDisable(antiHunger);
 
             Vec3d pos = Eclipse.client.player.getPos();
             int grounds = (int) Math.ceil(Math.abs(
@@ -62,6 +67,7 @@ public class MacePlus extends Module {
                     Eclipse.client.player.horizontalCollision
             ));
 
+            ModuleManager.revertTemp(antiHunger);
             ModuleManager.revertTemp(noFall);
         });
     }

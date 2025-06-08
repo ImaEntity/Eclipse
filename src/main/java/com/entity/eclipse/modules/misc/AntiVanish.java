@@ -156,7 +156,7 @@ public class AntiVanish extends Module {
 
                 Eclipse.client.getNetworkHandler().sendPacket(new RequestCommandCompletionsC2SPacket(
                         id,
-                        String.format("%s ", this.config.get("Command"))
+                        String.format("%s ", (String) this.config.get("Command"))
                 ));
             }
         }

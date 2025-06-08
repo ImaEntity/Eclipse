@@ -21,10 +21,6 @@ public class NoFall extends Module {
             if(Eclipse.client.player == null) return;
             if(Eclipse.client.getNetworkHandler() == null) return;
 
-            // TODO: Do some dumb shit with this, haven't checked back in like 7 updates
-            // Forgetting this if statement leads to the SERVER sending invalid packets.
-            // And also several network protocol errors upon rejoining.
-            // Exploit potential?
             if(!(event.getPacket() instanceof PlayerMoveC2SPacket)) return;
 
             Module flight = ModuleManager.getByClass(Flight.class);

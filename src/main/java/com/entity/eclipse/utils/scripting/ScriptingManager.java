@@ -3,13 +3,11 @@ package com.entity.eclipse.utils.scripting;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.utils.events.Events;
 import com.entity.eclipse.utils.events.block.BlockEvents;
+import com.entity.eclipse.utils.events.chat.ChatEvents;
 import com.entity.eclipse.utils.events.lore.LoreEvents;
 import com.entity.eclipse.utils.events.packet.PacketEvents;
 import com.entity.eclipse.utils.events.tick.TickEvents;
-import com.entity.eclipse.utils.scripting.wrappers.ConfigWrapper;
-import com.entity.eclipse.utils.scripting.wrappers.EclipseWrapper;
-import com.entity.eclipse.utils.scripting.wrappers.ModuleManagerWrapper;
-import com.entity.eclipse.utils.scripting.wrappers.ModuleTypeWrapper;
+import com.entity.eclipse.utils.scripting.wrappers.*;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -21,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ScriptingManager {
+
     public static Context createEngine() {
         return Context.enter();
     }
@@ -28,18 +27,22 @@ public class ScriptingManager {
     public static Scriptable createScope(Context engine) {
         Scriptable scope = engine.initStandardObjects();
 
-        ScriptableObject.putProperty(scope, "Eclipse", Context.javaToJS(new EclipseWrapper(), scope));
+        ScriptableObject.putConstProperty(scope, "Eclipse", Context.javaToJS(new EclipseWrapper(), scope));
 
-        ScriptableObject.putProperty(scope, "ModuleType", Context.javaToJS(new ModuleTypeWrapper(), scope));
-        ScriptableObject.putProperty(scope, "ModuleManager", Context.javaToJS(new ModuleManagerWrapper(), scope));
+        ScriptableObject.putConstProperty(scope, "ModuleType", Context.javaToJS(new ModuleTypeWrapper(), scope));
+        ScriptableObject.putConstProperty(scope, "ModuleManager", Context.javaToJS(new ModuleManagerWrapper(), scope));
 
-        ScriptableObject.putProperty(scope, "Events", Context.javaToJS(Events.class, scope));
-        ScriptableObject.putProperty(scope, "PacketEvents", Context.javaToJS(PacketEvents.class, scope));
-        ScriptableObject.putProperty(scope, "TickEvents", Context.javaToJS(TickEvents.class, scope));
-        ScriptableObject.putProperty(scope, "LoreEvents", Context.javaToJS(LoreEvents.class, scope));
-        ScriptableObject.putProperty(scope, "BlockEvents", Context.javaToJS(BlockEvents.class, scope));
+        ScriptableObject.putConstProperty(scope, "Events", Context.javaToJS(Events.class, scope));
+        ScriptableObject.putConstProperty(scope, "PacketEvents", Context.javaToJS(PacketEvents.class, scope));
+        ScriptableObject.putConstProperty(scope, "TickEvents", Context.javaToJS(TickEvents.class, scope));
+        ScriptableObject.putConstProperty(scope, "LoreEvents", Context.javaToJS(LoreEvents.class, scope));
+        ScriptableObject.putConstProperty(scope, "BlockEvents", Context.javaToJS(BlockEvents.class, scope));
+        ScriptableObject.putConstProperty(scope, "ChatEvents", Context.javaToJS(ChatEvents.class, scope));
 
-        ScriptableObject.putProperty(scope, "Config", Context.javaToJS(new ConfigWrapper(), scope));
+        ScriptableObject.putConstProperty(scope, "Blocks", Context.javaToJS(new BlocksWrapper(), scope));
+        ScriptableObject.putConstProperty(scope, "Direction", Context.javaToJS(new DirectionWrapper(), scope));
+
+        ScriptableObject.putConstProperty(scope, "Config", Context.javaToJS(new ConfigWrapper(), scope));
 
         return scope;
     }

@@ -79,7 +79,7 @@ public class AutoFarm extends Module {
 
                         int slot = Slots.findFirst(
                                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                                stack -> slotIdx -> {
+                                (stack, slotIdx) -> {
                                     if((boolean) this.config.get("RememberSeedTypes")) {
                                         if(this.blockSeedCache.get(pos) != stack.getItem())
                                             return false;
@@ -138,7 +138,7 @@ public class AutoFarm extends Module {
                         int prevSlot = Eclipse.client.player.getInventory().selectedSlot;
                         int slot = Slots.findFirst(
                                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                                stack -> slotIdx -> stack.isIn(ItemTags.HOES)
+                                (stack, slotIdx) -> stack.isIn(ItemTags.HOES)
                         );
 
                         if(!Slots.HOTBAR.contains(slot)) {

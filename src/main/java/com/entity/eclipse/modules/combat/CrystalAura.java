@@ -103,7 +103,7 @@ public class CrystalAura extends Module {
 
             // If you're further than 10 blocks you take no damage
             if(crystal.distanceTo(Eclipse.client.player) <= 10)
-                dangerousCrystals.add((EndCrystalEntity) entity);
+                dangerousCrystals.add(crystal);
         }
 
         if(dangerousCrystals.isEmpty()) return;
@@ -114,7 +114,7 @@ public class CrystalAura extends Module {
 
         int blockSlot = Slots.findFirst(
                 new Slots.Range(Slots.HOTBAR.start(), endSlot),
-                stack -> slotIdx -> ((ListValue) this.config.getRaw("JunkBlocks")).contains(stack.getItem())
+                (stack, slotIdx) -> ((ListValue) this.config.getRaw("JunkBlocks")).contains(stack.getItem())
         );
 
         if(!Slots.HOTBAR.contains(blockSlot))

@@ -100,7 +100,7 @@ public class ModuleSettingsGUI extends Screen {
             // Add ctrl a/c/v/backspace
             boolean hasControl = (modifiers & GLFW.GLFW_MOD_CONTROL) == GLFW.GLFW_MOD_CONTROL;
 
-            if(keyCode == GLFW.GLFW_KEY_BACKSPACE && this.keyboardInput.length() > 0) {
+            if(keyCode == GLFW.GLFW_KEY_BACKSPACE && !this.keyboardInput.isEmpty()) {
                 this.keyboardInput = this.keyboardInput.substring(0, this.keyboardInput.length() - 1);
 
                 if(hasControl)
@@ -319,12 +319,12 @@ public class ModuleSettingsGUI extends Screen {
                 EnumValue<?> _enum = (EnumValue<?>) value;
 
                 for(int j = 0; j < _enum.values.length; j++) {
-                    String enumValueName = _enum.values[j].toString();
+                    String enumValueName = Strings.camelToReadable(_enum.values[j].toString());
                     maxWidth = Math.max(maxWidth, this.textRenderer.getWidth(enumValueName));
                 }
 
                 for(int j = 0; j < _enum.values.length; j++) {
-                    String enumValueName = _enum.values[j].toString();
+                    String enumValueName = Strings.camelToReadable(_enum.values[j].toString());
                     int valueWidth = this.textRenderer.getWidth(enumValueName);
 
                     if(
@@ -341,6 +341,9 @@ public class ModuleSettingsGUI extends Screen {
                     }
                 }
             }
+
+            if(value instanceof EnumValue<?>)
+                settingValueWidth = this.textRenderer.getWidth(Strings.camelToReadable(value.toString()));
 
             if(
                     ((mouseX >= left + this.padding &&
@@ -369,7 +372,7 @@ public class ModuleSettingsGUI extends Screen {
         if(!settings.isEmpty())
             y += this.textRenderer.fontHeight + this.padding;
 
-        String bindString = "bind";
+        String bindString = "Bind";
         String bindText = this.module.keybind.toString();
         int bindStringWidth = this.textRenderer.getWidth(bindString);
         int bindTextWidth = this.textRenderer.getWidth(bindText);
@@ -624,7 +627,7 @@ public class ModuleSettingsGUI extends Screen {
                 EnumValue<?> _enum = (EnumValue<?>) value;
 
                 for(int j = 0; j < _enum.values.length; j++) {
-                    String enumValueName = _enum.values[j].toString();
+                    String enumValueName = Strings.camelToReadable(_enum.values[j].toString());
                     maxWidth = Math.max(maxWidth, this.textRenderer.getWidth(enumValueName));
                 }
 
@@ -637,7 +640,7 @@ public class ModuleSettingsGUI extends Screen {
                 );
 
                 for(int j = 0; j < _enum.values.length; j++) {
-                    String enumValueName = _enum.values[j].toString();
+                    String enumValueName = Strings.camelToReadable(_enum.values[j].toString());
 
                     context.drawTextWithShadow(
                             this.textRenderer,
@@ -647,6 +650,11 @@ public class ModuleSettingsGUI extends Screen {
                             0xAAAAAA
                     );
                 }
+            }
+
+            if(value instanceof EnumValue<?>) {
+                settingValue = Strings.camelToReadable(settingValue);
+                valueWidth = this.textRenderer.getWidth(settingValue);
             }
 
             if(settingValue.equalsIgnoreCase("§7§r")) {

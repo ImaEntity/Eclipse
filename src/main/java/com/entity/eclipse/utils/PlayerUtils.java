@@ -1,8 +1,10 @@
 package com.entity.eclipse.utils;
 
 import com.entity.eclipse.Eclipse;
+import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -77,5 +79,24 @@ public class PlayerUtils {
         }
 
         return lastAttacked;
+    }
+
+    public static void serverLookAt(EntityAnchorArgumentType.EntityAnchor anchorPoint, Vec3d target) {
+        if(Eclipse.client.player == null) return;
+        if(Eclipse.client.getNetworkHandler() == null) return;
+
+        Vec3d pos = anchorPoint.positionAt(Eclipse.client.player);
+
+        double offX = target.getX() - pos.getX();
+        double offY = target.getY() - pos.getY();
+        double offZ = target.getZ() - pos.getZ();
+        double horizontalDist = Math.sqrt(offX * offX + offZ * offZ);
+
+        Eclipse.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(
+                MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(offZ, offX)) - 90f),
+                MathHelper.wrapDegrees((float) Math.toDegrees(-Math.atan2(offY, horizontalDist))),
+                Eclipse.client.player.isOnGround(),
+                Eclipse.client.player.horizontalCollision
+        ));
     }
 }

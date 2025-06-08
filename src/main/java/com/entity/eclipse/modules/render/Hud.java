@@ -99,7 +99,7 @@ public class Hud extends Module {
             left.add(String.format("Facing: %s; %c%s", direction, positive ? '+' : '-', axisDir));
 
         if((boolean) this.config.get("ShowSpeed"))
-            left.add(String.format("%.3f m/s", Eclipse.client.player.getVelocity().length()));
+            left.add(String.format("%.3f m/s", Eclipse.client.player.getVelocity().length() * 20));
 
         PlayerListEntry entry = Eclipse.client.getNetworkHandler().getPlayerListEntry(Eclipse.client.player.getUuid());
         if(entry != null && (boolean) this.config.get("ShowPing"))

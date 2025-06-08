@@ -3,12 +3,14 @@ package com.entity.eclipse.modules.combat;
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.Module;
 import com.entity.eclipse.modules.ModuleType;
+import com.entity.eclipse.utils.PlayerUtils;
 import com.entity.eclipse.utils.events.render.Render2DEvent;
 import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.*;
+import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,18 +103,23 @@ public class Killaura extends Module {
             }
         }
 
+        if(closestEntity == null) return;
+
         int ticksPerAttack = (int) (Eclipse.client.player.getAttackCooldownProgressPerTick());
         int defaultDelay = (boolean) this.config.get("AutoDelay") ?
-                ticksPerAttack :
+                ticksPerAttack + 1 :
                 this.config.get("HitDelay");
 
         int delay = this.delays.getOrDefault(closestEntity, defaultDelay);
         if(delay < defaultDelay) return;
 
-        // TODO: Look at the entity before attacking
+        Eclipse.client.player.swingHand(Hand.MAIN_HAND);
+        PlayerUtils.serverLookAt(
+                EntityAnchorArgumentType.EntityAnchor.EYES,
+                closestEntity.getPos().offset(Direction.UP, closestEntity.getHeight() / 2)
+        );
 
-        Eclipse.client.getNetworkHandler().sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
-        Eclipse.client.interactionManager.attackEntity(Eclipse.client.player, closestEntity);
+        Eclipse.client.interactionManager.attackEntity(Eclipse.client.player, closestEntity); 
 
         this.delays.put(closestEntity, 0);
     }

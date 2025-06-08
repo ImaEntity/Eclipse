@@ -32,7 +32,7 @@ public class AutoTotem extends Module {
 
         int sourceIndex = Slots.findFirst(
                 Slots.ALL,
-                stack -> slotIdx -> stack.isOf(Items.TOTEM_OF_UNDYING)
+                (stack, slotIdx) -> stack.isOf(Items.TOTEM_OF_UNDYING)
         );
 
         int sourceSlot = Slots.indexToID(sourceIndex);

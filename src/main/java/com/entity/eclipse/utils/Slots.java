@@ -3,12 +3,11 @@ package com.entity.eclipse.utils;
 import com.entity.eclipse.Eclipse;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.SlotActionType;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class Slots {
     public record Range(int start, int end) {
@@ -36,19 +35,27 @@ public class Slots {
                 INVALID_SLOT;
     }
 
+    public static int idToIndex(int slotId) {
+        return HOTBAR.contains(slotId - 36) ? slotId - 36 :
+                MAIN.contains(slotId) ? slotId :
+                ARMOR.contains(slotId + 31) ? 36 + slotId - 5 :
+                slotId == 45 ? OFFHAND :
+                INVALID_SLOT;
+    }
+
     public static int getSelectedID() {
         if(Eclipse.client.player == null) return INVALID_SLOT;
         return indexToID(Eclipse.client.player.getInventory().selectedSlot);
     }
 
-    public static int findBest(Range range, Function<ItemStack, Function<Integer, Double>> criteria) {
+    public static int findBest(Range range, BiFunction<ItemStack, Integer, Double> criteria) {
         if(Eclipse.client.player == null) return INVALID_SLOT;
 
         HashMap<Integer, Double> slots = new HashMap<>();
 
         for(int i = range.end(); i >= range.start(); i--) {
             ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
-            slots.put(i, criteria.apply(stack).apply(i));
+            slots.put(i, criteria.apply(stack, i));
         }
 
         int bestSlot = INVALID_SLOT;
@@ -65,14 +72,14 @@ public class Slots {
         return bestSlot;
     }
 
-    public static ArrayList<Integer> find(Range range, Function<ItemStack, Function<Integer, Boolean>> filter) {
+    public static ArrayList<Integer> find(Range range, BiFunction<ItemStack, Integer, Boolean> filter) {
         if(Eclipse.client.player == null) return new ArrayList<>();
 
         ArrayList<Integer> slotIndices = new ArrayList<>();
 
         for(int i = range.end(); i >= range.start(); i--) {
             ItemStack stack = Eclipse.client.player.getInventory().getStack(i);
-            if(!filter.apply(stack).apply(i)) continue;
+            if(!filter.apply(stack, i)) continue;
 
             slotIndices.add(i);
         }
@@ -80,7 +87,7 @@ public class Slots {
         return slotIndices;
     }
 
-    public static int findFirst(Range range, Function<ItemStack, Function<Integer, Boolean>> filter) {
+    public static int findFirst(Range range, BiFunction<ItemStack, Integer, Boolean> filter) {
         ArrayList<Integer> slotIndices = find(range, filter);
         if(slotIndices.isEmpty()) return INVALID_SLOT;
 
@@ -94,30 +101,14 @@ public class Slots {
         if(source == INVALID_SLOT) return;
         if(destination == INVALID_SLOT) return;
         if(source == destination) return;
+        if(idToIndex(source) == INVALID_SLOT) return;
 
-        Eclipse.client.interactionManager.clickSlot(
-                Eclipse.client.player.playerScreenHandler.syncId,
-                source,
-                GLFW.GLFW_MOUSE_BUTTON_LEFT,
-                SlotActionType.PICKUP,
-                Eclipse.client.player
-        );
-
+        // why the fuck is one an id and one an index
         Eclipse.client.interactionManager.clickSlot(
                 Eclipse.client.player.playerScreenHandler.syncId,
                 destination,
-                GLFW.GLFW_MOUSE_BUTTON_LEFT,
-                SlotActionType.PICKUP,
-                Eclipse.client.player
-        );
-
-        if(Eclipse.client.player.currentScreenHandler.getCursorStack().isEmpty()) return;
-
-        Eclipse.client.interactionManager.clickSlot(
-                Eclipse.client.player.playerScreenHandler.syncId,
-                source,
-                GLFW.GLFW_MOUSE_BUTTON_LEFT,
-                SlotActionType.PICKUP,
+                idToIndex(source),
+                SlotActionType.SWAP,
                 Eclipse.client.player
         );
     }
