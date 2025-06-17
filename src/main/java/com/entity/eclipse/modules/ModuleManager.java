@@ -2,6 +2,7 @@ package com.entity.eclipse.modules;
 
 import com.entity.eclipse.Eclipse;
 import com.entity.eclipse.modules.combat.*;
+import com.entity.eclipse.modules.exploit.MoneyDupe;
 import com.entity.eclipse.modules.exploit.OffhandCrash;
 import com.entity.eclipse.modules.misc.*;
 import com.entity.eclipse.modules.movement.*;
@@ -9,10 +10,7 @@ import com.entity.eclipse.modules.misc.AntiPacketKick;
 import com.entity.eclipse.modules.movement.Blink;
 import com.entity.eclipse.modules.misc.PacketLoss;
 import com.entity.eclipse.modules.exploit.ProjectileDupe;
-import com.entity.eclipse.modules.player.AntiHunger;
-import com.entity.eclipse.modules.player.AutoEat;
-import com.entity.eclipse.modules.player.AutoTool;
-import com.entity.eclipse.modules.player.NoEntityPush;
+import com.entity.eclipse.modules.player.*;
 import com.entity.eclipse.modules.render.*;
 import com.entity.eclipse.modules.world.*;
 import com.entity.eclipse.utils.events.Events;
@@ -54,6 +52,7 @@ public class ModuleManager {
         modules.add(new AutoSneak());
         modules.add(new Blink());
         modules.add(new Flight());
+        modules.add(new InventoryMove());
         modules.add(new Jesus());
         modules.add(new LongJump());
         modules.add(new NoFall());
@@ -69,6 +68,7 @@ public class ModuleManager {
         modules.add(new AntiHunger());
         modules.add(new AutoEat());
         modules.add(new AutoTool());
+        modules.add(new ElytraTweaks());
         modules.add(new NoEntityPush());
 
         // Render
@@ -98,6 +98,7 @@ public class ModuleManager {
 
         // Exploit
 
+        modules.add(new MoneyDupe());
         modules.add(new OffhandCrash());
         modules.add(new ProjectileDupe());
 

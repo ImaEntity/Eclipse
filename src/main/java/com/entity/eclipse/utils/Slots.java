@@ -2,7 +2,9 @@ package com.entity.eclipse.utils;
 
 import com.entity.eclipse.Eclipse;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,14 @@ public class Slots {
     public static final Range ALL = new Range(0, 40);
 
     public static int indexToID(int slotIndex) {
+        if(Eclipse.client.player == null) return INVALID_SLOT;
+
+        if(Eclipse.client.player.currentScreenHandler instanceof AnvilScreenHandler) {
+            return HOTBAR.contains(slotIndex) ? slotIndex + 30 :
+                    MAIN.contains(slotIndex) ? 3 + slotIndex - 9:
+                    INVALID_SLOT;
+        }
+
         return HOTBAR.contains(slotIndex) ? slotIndex + 36 :
                 MAIN.contains(slotIndex) ? slotIndex :
                 ARMOR.contains(slotIndex) ? 5 + slotIndex - 36 :
@@ -101,14 +111,30 @@ public class Slots {
         if(source == INVALID_SLOT) return;
         if(destination == INVALID_SLOT) return;
         if(source == destination) return;
-        if(idToIndex(source) == INVALID_SLOT) return;
 
-        // why the fuck is one an id and one an index
+        Eclipse.client.interactionManager.clickSlot(
+                Eclipse.client.player.playerScreenHandler.syncId,
+                source,
+                GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                SlotActionType.PICKUP,
+                Eclipse.client.player
+        );
+
         Eclipse.client.interactionManager.clickSlot(
                 Eclipse.client.player.playerScreenHandler.syncId,
                 destination,
-                idToIndex(source),
-                SlotActionType.SWAP,
+                GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                SlotActionType.PICKUP,
+                Eclipse.client.player
+        );
+
+        if(Eclipse.client.player.currentScreenHandler.getCursorStack().isEmpty()) return;
+
+        Eclipse.client.interactionManager.clickSlot(
+                Eclipse.client.player.playerScreenHandler.syncId,
+                source,
+                GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                SlotActionType.PICKUP,
                 Eclipse.client.player
         );
     }

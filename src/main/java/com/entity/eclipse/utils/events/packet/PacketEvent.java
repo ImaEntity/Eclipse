@@ -1,13 +1,16 @@
 package com.entity.eclipse.utils.events.packet;
 
+import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.Packet;
 
 public class PacketEvent {
     private Packet<?> packet;
+    private ClientConnection connection;
     private boolean cancelled = false;
 
-    public PacketEvent(Packet<?> packet) {
+    public PacketEvent(Packet<?> packet, ClientConnection connection) {
         this.packet = packet;
+        this.connection = connection;
     }
 
     public boolean isCancelled() {
@@ -22,5 +25,8 @@ public class PacketEvent {
     }
     public Packet<?> getPacket() {
         return this.packet;
+    }
+    public ClientConnection getConnection() {
+        return this.connection;
     }
 }

@@ -21,18 +21,18 @@ public class Velocity extends Module {
             if(!this.isEnabled()) return;
             if(!(event.getPacket() instanceof EntityVelocityUpdateS2CPacket packet)) return;
 
-            double velX = packet.getVelocityX() / 8000.0;
-            double velY = packet.getVelocityY() / 8000.0;
-            double velZ = packet.getVelocityZ() / 8000.0;
+            double velX = packet.getVelocityX();
+            double velY = packet.getVelocityY();
+            double velZ = packet.getVelocityZ();
 
             // These aren't redundant casts you fucking dipshit
             velX *= (double) this.config.get("HorizontalMultiplier");
             velY *= (double) this.config.get("VerticalMultiplier");
             velZ *= (double) this.config.get("HorizontalMultiplier");
 
-            ((IEntityVelocityUpdateS2CPacketMixin) packet).setVelocityX((int) (velX * 8000));
-            ((IEntityVelocityUpdateS2CPacketMixin) packet).setVelocityY((int) (velY * 8000));
-            ((IEntityVelocityUpdateS2CPacketMixin) packet).setVelocityZ((int) (velZ * 8000));
+            ((IEntityVelocityUpdateS2CPacketMixin) packet).setVelocityX((int) (velX * 8000.0));
+            ((IEntityVelocityUpdateS2CPacketMixin) packet).setVelocityY((int) (velY * 8000.0));
+            ((IEntityVelocityUpdateS2CPacketMixin) packet).setVelocityZ((int) (velZ * 8000.0));
         });
     }
 

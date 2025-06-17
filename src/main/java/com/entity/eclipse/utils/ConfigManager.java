@@ -22,7 +22,7 @@ import java.util.zip.Inflater;
 //     3. Smaller
 //     4. Doesn't have to parse object trees
 public class ConfigManager {
-    private static final int VERSION = 4;
+    private static final int VERSION = 5;
     private static final File configFile = new File(Eclipse.client.runDirectory.getAbsolutePath() + "/." + Eclipse.MOD_ID + "/config");
 
     private static byte[] configToBytes(Configuration config) {
@@ -48,8 +48,12 @@ public class ConfigManager {
     public static void saveState() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        // Version
         stream.write(VERSION);
+
+        // decompressed length
+        // (overwritten later)
+        stream.write(0);
+        stream.write(0);
 
         stream.writeBytes(configToBytes(Eclipse.config));
 
@@ -84,10 +88,15 @@ public class ConfigManager {
             stream.writeBytes(name.getBytes());
         }
 
+        // very stupid
+        byte[] finalConfig = stream.toByteArray();
+        finalConfig[1] = (byte) (stream.size() >> 8);
+        finalConfig[2] = (byte) (stream.size() & 0xFF);
+
         Deflater deflater = new Deflater();
         byte[] tempOut = new byte[stream.size()];
 
-        deflater.setInput(stream.toByteArray());
+        deflater.setInput(finalConfig);
         deflater.finish();
 
         int deflatedSize = deflater.deflate(tempOut);
@@ -108,20 +117,32 @@ public class ConfigManager {
         try {
             Inflater inflater = new Inflater();
             byte[] compressedBytes = FileUtils.readFileToByteArray(configFile);
-            byte[] tempOut = new byte[4096]; // This is dumb
+            byte[] uncompressedBytes = new byte[4096]; // This is dumb
 
             inflater.setInput(compressedBytes);
-            int inflatedSize = inflater.inflate(tempOut);
-
+            inflater.inflate(uncompressedBytes);
             inflater.end();
-
-            byte[] uncompressedBytes = new byte[inflatedSize];
-            System.arraycopy(tempOut, 0, uncompressedBytes, 0, inflatedSize);
 
             ByteArrayInputStream stream = new ByteArrayInputStream(uncompressedBytes);
 
             int version = stream.read();
             Eclipse.log("Config version: " + version);
+
+            int decompressedSize = -1;
+            if(version >= 5) decompressedSize = (short) (stream.read() << 8 | stream.read());
+
+            // even more stupid
+            if(decompressedSize != -1) {
+                Inflater betterInflater = new Inflater();
+                byte[] decompressedBytes = new byte[decompressedSize];
+
+                betterInflater.setInput(compressedBytes);
+                betterInflater.inflate(decompressedBytes);
+                betterInflater.end();
+
+                stream = new ByteArrayInputStream(decompressedBytes);
+                stream.readNBytes(3);
+            }
 
             int optionCount = stream.read();
             for(int i = 0; i < optionCount; i++) {

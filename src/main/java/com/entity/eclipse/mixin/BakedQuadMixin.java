@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(BakedQuad.class)
 public class BakedQuadMixin {
-    @ModifyReturnValue(method = "hasShade", at = @At("RETURN"))
+    @ModifyReturnValue(method = "shade", at = @At("RETURN"))
     private boolean noShading(boolean original) {
         Module ng = ModuleManager.getByClass(NegativeGraphics.class);
         if(ng == null) return original;

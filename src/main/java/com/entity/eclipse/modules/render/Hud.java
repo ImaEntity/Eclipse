@@ -50,7 +50,7 @@ public class Hud extends Module {
         long milliDiff = System.currentTimeMillis() - this.lastPacketTime;
 
         this.tpsHistory.add(20.0 / Math.max((milliDiff - 1000.0) / 500.0, 1.0));
-        if(this.tpsHistory.size() > 50) // 50 entries * 100 ms = last 5 seconds of tps
+        if(this.tpsHistory.size() > 300) // 300 entries * 100 ms = last 30 seconds of tps
             this.tpsHistory.removeFirst();
 
         this.tps = this.tpsHistory.stream().reduce(Double::sum).orElse(0.0) / this.tpsHistory.size();

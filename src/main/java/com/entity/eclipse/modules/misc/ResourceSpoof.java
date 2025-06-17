@@ -22,6 +22,7 @@ import java.net.URL;
 public class ResourceSpoof extends Module {
     // Reset by some random mixin
     public boolean cancelStatusPackets = false;
+    private Text packMessage = null;
 
     public ResourceSpoof() {
         super("ResourceSpoof", "Tells the server you accepted their resource packs.", ModuleType.MISC);
@@ -37,8 +38,6 @@ public class ResourceSpoof extends Module {
 
         Events.Packet.register(PacketEvents.RECEIVE, event -> {
             if(!this.isEnabled()) return;
-            if(Eclipse.client.getNetworkHandler() == null) return;
-
             if(!(event.getPacket() instanceof ResourcePackSendS2CPacket packet)) return;
 
             MutableText acceptPrompt = Text.literal("[Accept Pack]").setStyle(
@@ -51,7 +50,7 @@ public class ResourceSpoof extends Module {
                                 try { url = new URI(packet.url()).toURL(); } catch(Exception ignored) {}
 
                                 if(url == null)
-                                    Eclipse.notifyUser("Invalid url!");
+                                    this.notifyUser("Invalid url!");
 
                                 this.cancelStatusPackets = true;
                                 Eclipse.client.getServerResourcePackProvider().addResourcePack(packet.id(), url, packet.hash());
@@ -61,28 +60,31 @@ public class ResourceSpoof extends Module {
                             }))
             );
 
-            MutableText msg = Text.literal("This server has ")
+            this.packMessage = Text.literal("This server has ")
                     .append(packet.required() ? "a required" : "an optional")
                     .append(" resource pack. ")
                     .append(acceptPrompt);
 
-            this.notifyUserRaw(msg);
             event.setCancelled(true);
 
-            Eclipse.client.getNetworkHandler().sendPacket(new ResourcePackStatusC2SPacket(packet.id(), ResourcePackStatusC2SPacket.Status.ACCEPTED));
-            Eclipse.client.getNetworkHandler().sendPacket(new ResourcePackStatusC2SPacket(packet.id(), ResourcePackStatusC2SPacket.Status.DOWNLOADED));
-            Eclipse.client.getNetworkHandler().sendPacket(new ResourcePackStatusC2SPacket(packet.id(), ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));
+            event.getConnection().send(new ResourcePackStatusC2SPacket(packet.id(), ResourcePackStatusC2SPacket.Status.ACCEPTED));
+            event.getConnection().send(new ResourcePackStatusC2SPacket(packet.id(), ResourcePackStatusC2SPacket.Status.DOWNLOADED));
+            event.getConnection().send(new ResourcePackStatusC2SPacket(packet.id(), ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));
         });
     }
 
     @Override
     public void tick() {
+        if(Eclipse.client.player == null) return;
+        if(this.packMessage == null) return;
 
+        this.notifyUserRaw(this.packMessage);
+        this.packMessage = null;
     }
 
     @Override
     public void onEnable() {
-
+        this.packMessage = null;
     }
 
     @Override

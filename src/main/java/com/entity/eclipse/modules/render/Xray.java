@@ -6,6 +6,7 @@ import com.entity.eclipse.modules.ModuleType;
 import com.entity.eclipse.utils.events.render.Render2DEvent;
 import com.entity.eclipse.utils.events.render.Render3DEvent;
 import com.entity.eclipse.utils.types.BlockValue;
+import com.entity.eclipse.utils.types.BooleanValue;
 import com.entity.eclipse.utils.types.ListValue;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -23,18 +24,25 @@ public class Xray extends Module {
                 "deepslate_diamond_ore",
                 "ancient_debris"
         ));
+
+        this.config.create("OnlyShowExposed", new BooleanValue(false));
     }
 
     public boolean shouldRenderBlock(boolean original, BlockState state, BlockView view, BlockPos pos, Direction facing, BlockPos blockPos) {
         if(Eclipse.client.world == null) return original;
 
+        boolean isExposed =
+                Eclipse.client.world.getBlockState(pos.up()   ).getOutlineShape(view, pos.up()   ) != VoxelShapes.fullCube() ||
+                Eclipse.client.world.getBlockState(pos.down() ).getOutlineShape(view, pos.down() ) != VoxelShapes.fullCube() ||
+                Eclipse.client.world.getBlockState(pos.north()).getOutlineShape(view, pos.north()) != VoxelShapes.fullCube() ||
+                Eclipse.client.world.getBlockState(pos.east() ).getOutlineShape(view, pos.east() ) != VoxelShapes.fullCube() ||
+                Eclipse.client.world.getBlockState(pos.south()).getOutlineShape(view, pos.south()) != VoxelShapes.fullCube() ||
+                Eclipse.client.world.getBlockState(pos.west() ).getOutlineShape(view, pos.west() ) != VoxelShapes.fullCube();
+
         boolean shouldShow = ((ListValue) this.config.get("BlockIds")).contains(state.getBlock());
-        boolean isFullCube = state.getOutlineShape(view, pos) == VoxelShapes.fullCube();
 
-        if(!shouldShow && !isFullCube)
-            return false;
-
-        return shouldShow;
+        if(!shouldShow) return false;
+        return !((boolean) this.config.get("OnlyShowExposed")) || isExposed;
     }
 
     @Override
